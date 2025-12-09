@@ -1,0 +1,219 @@
+{
+  "analysis_config": {
+    "target_user_email": "justin@swiftscore.org",
+    "analysis_scope": {
+      "max_evaluations_to_analyze": 1000,
+      "max_notes_samples": 500,
+      "include_archived": false,
+      "include_informal": true,
+      "date_range_months": 24
+    },
+    "quality_thresholds": {
+      "min_notes_length": 50,
+      "min_evaluation_json_size": 100,
+      "max_evaluation_json_size": 50000,
+      "acceptable_missing_data_percentage": 10.0
+    }
+  },
+  "danielson_framework": {
+    "expected_domains": [
+      "I-A", "I-B", "I-C", "I-D", "I-E", "I-F",
+      "II-A", "II-B", "II-C", "II-D", "II-E",
+      "III-A", "III-B", "III-C", "III-D", "III-E",
+      "IV-A", "IV-B", "IV-C", "IV-D", "IV-E", "IV-F"
+    ],
+    "domain_categories": {
+      "Planning_and_Preparation": ["I-A", "I-B", "I-C", "I-D", "I-E", "I-F"],
+      "Classroom_Environment": ["II-A", "II-B", "II-C", "II-D", "II-E"],
+      "Instruction": ["III-A", "III-B", "III-C", "III-D", "III-E"],
+      "Professional_Responsibilities": ["IV-A", "IV-B", "IV-C", "IV-D", "IV-E", "IV-F"]
+    },
+    "score_levels": {
+      "unsatisfactory": 1,
+      "basic": 2,
+      "proficient": 3,
+      "distinguished": 4
+    }
+  },
+  "data_quality_checks": {
+    "required_fields": {
+      "evaluation": {
+        "required": true,
+        "type": "jsonb",
+        "description": "Main evaluation data structure"
+      },
+      "teacher_name": {
+        "required": true,
+        "type": "text",
+        "description": "Teacher being evaluated"
+      },
+      "school_name": {
+        "required": true,
+        "type": "text", 
+        "description": "School where evaluation took place"
+      },
+      "organization_id": {
+        "required": true,
+        "type": "uuid",
+        "description": "Organization owning the evaluation"
+      },
+      "framework_id": {
+        "required": false,
+        "type": "text",
+        "description": "Evaluation framework identifier"
+      },
+      "low_inference_notes": {
+        "required": false,
+        "type": "text",
+        "description": "Evaluator observations and notes"
+      },
+      "ai_evaluation": {
+        "required": false,
+        "type": "jsonb",
+        "description": "AI-generated evaluation analysis"
+      }
+    },
+    "validation_rules": {
+      "evaluation_json_structure": {
+        "should_contain_domains": true,
+        "should_have_numeric_scores": true,
+        "should_have_evidence_text": false
+      },
+      "notes_quality": {
+        "min_word_count": 10,
+        "should_reference_domains": true,
+        "should_contain_evidence_keywords": true,
+        "evidence_keywords": ["observed", "evidence", "demonstrated", "showed", "exhibited"],
+        "recommendation_keywords": ["recommend", "suggest", "consider", "growth", "improve"]
+      },
+      "temporal_consistency": {
+        "check_duplicate_evaluations": true,
+        "max_evaluations_per_teacher_per_day": 3,
+        "reasonable_evaluation_frequency": "monthly"
+      }
+    }
+  },
+  "analysis_outputs": {
+    "generate_summary_report": true,
+    "export_sample_data": true,
+    "create_data_dictionary": true,
+    "generate_schema_documentation": true,
+    "include_performance_recommendations": true
+  },
+  "database_performance": {
+    "recommended_indexes": [
+      {
+        "table": "danielson",
+        "columns": ["organization_id", "created_at"],
+        "type": "btree",
+        "rationale": "Most queries filter by organization and sort by date"
+      },
+      {
+        "table": "danielson", 
+        "columns": ["organization_id", "school_name"],
+        "type": "btree",
+        "rationale": "Principal-level access filtering by school"
+      },
+      {
+        "table": "danielson",
+        "columns": ["organization_id", "teacher_name", "created_at"],
+        "type": "btree",
+        "rationale": "Teacher-specific evaluation lookups with temporal ordering"
+      },
+      {
+        "table": "danielson",
+        "columns": ["created_by", "organization_id"],
+        "type": "btree",
+        "rationale": "Evaluator access filtering for created evaluations"
+      },
+      {
+        "table": "danielson",
+        "columns": ["evaluator", "organization_id"],
+        "type": "btree",
+        "rationale": "Evaluator access filtering for assigned evaluations"
+      },
+      {
+        "table": "danielson",
+        "columns": ["evaluation"],
+        "type": "gin",
+        "rationale": "JSON queries on evaluation structure for domain analysis"
+      },
+      {
+        "table": "users",
+        "columns": ["email", "deleted_at"],
+        "type": "btree",
+        "rationale": "User authentication and active user lookups"
+      },
+      {
+        "table": "users",
+        "columns": ["organization_id", "deleted_at"],
+        "type": "btree",
+        "rationale": "Organization user listings"
+      }
+    ],
+    "query_performance_targets": {
+      "user_permission_lookup": "< 50ms",
+      "evaluation_list_with_pagination": "< 200ms",
+      "evaluation_detail_retrieval": "< 100ms",
+      "organizational_summary": "< 500ms"
+    }
+  },
+  "sample_queries": {
+    "basic_exploration": [
+      "SELECT COUNT(*) FROM public.danielson WHERE deleted_at IS NULL",
+      "SELECT DISTINCT organization_id FROM public.danielson",
+      "SELECT MIN(created_at), MAX(created_at) FROM public.danielson"
+    ],
+    "user_specific": [
+      "User permission lookup",
+      "Evaluations accessible by user",
+      "Teacher summary for user's scope",
+      "School summary for user's scope"
+    ],
+    "data_quality": [
+      "Missing data analysis",
+      "Duplicate evaluation detection",
+      "JSON structure validation",
+      "Notes quality assessment"
+    ],
+    "performance_analysis": [
+      "Evaluation frequency by teacher",
+      "Temporal distribution patterns",
+      "School and teacher coverage",
+      "Framework usage patterns"
+    ]
+  },
+  "expected_data_patterns": {
+    "typical_evaluation_frequency": {
+      "formal_evaluations": "2-4 per teacher per year",
+      "informal_evaluations": "6-12 per teacher per year"
+    },
+    "json_structure_expectations": {
+      "evaluation_size_range": "1KB - 20KB typical",
+      "ai_evaluation_size_range": "500B - 5KB typical",
+      "notes_length_range": "100 - 2000 characters"
+    },
+    "organizational_scale": {
+      "teachers_per_school": "10 - 100 typical",
+      "schools_per_organization": "1 - 50 typical",
+      "evaluations_per_teacher_per_year": "4 - 15 typical"
+    }
+  },
+  "data_export_settings": {
+    "anonymization": {
+      "anonymize_teacher_names": false,
+      "anonymize_evaluator_names": true,
+      "anonymize_specific_school_details": false
+    },
+    "sample_size_limits": {
+      "max_evaluations_in_export": 100,
+      "max_teachers_in_export": 50,
+      "include_full_json_examples": 10
+    },
+    "output_formats": {
+      "json_summary": true,
+      "csv_summaries": true,
+      "markdown_documentation": true
+    }
+  }
+}

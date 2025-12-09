@@ -1,0 +1,102 @@
+{
+  "comment": "Example performance_level_config JSONB structure for organizations table",
+  "version": "1.0",
+  "framework": "danielson_2023",
+  "domains": {
+    "I-A": {
+      "name": "Planning and Preparation: Demonstrating Knowledge of Content and Pedagogy",
+      "green": 3,
+      "yellow": 2,
+      "red": 1,
+      "weight": 1.0
+    },
+    "I-B": {
+      "name": "Planning and Preparation: Demonstrating Knowledge of Students",
+      "green": 3,
+      "yellow": 2,
+      "red": 1,
+      "weight": 1.0
+    },
+    "I-C": {
+      "name": "Planning and Preparation: Setting Instructional Outcomes",
+      "green": 3,
+      "yellow": 2,
+      "red": 1,
+      "weight": 1.0
+    },
+    "II-A": {
+      "name": "Classroom Environment: Creating an Environment of Respect and Rapport",
+      "green": 3,
+      "yellow": 2,
+      "red": 1,
+      "weight": 1.0
+    },
+    "II-B": {
+      "name": "Classroom Environment: Establishing a Culture for Learning", 
+      "green": 3,
+      "yellow": 2,
+      "red": 1,
+      "weight": 1.0
+    },
+    "III-A": {
+      "name": "Instruction: Communicating with Students",
+      "green": 3,
+      "yellow": 2,
+      "red": 1,
+      "weight": 1.0
+    },
+    "III-B": {
+      "name": "Instruction: Using Questioning and Discussion Techniques",
+      "green": 3,
+      "yellow": 2,
+      "red": 1,
+      "weight": 1.0
+    },
+    "III-C": {
+      "name": "Instruction: Engaging Students in Learning",
+      "green": 3,
+      "yellow": 2,
+      "red": 1,
+      "weight": 1.0
+    },
+    "IV-A": {
+      "name": "Professional Responsibilities: Reflecting on Teaching",
+      "green": 3,
+      "yellow": 2,
+      "red": 1,
+      "weight": 1.0
+    }
+  },
+  "global_thresholds": {
+    "exemplar_teacher": 3.5,
+    "proficient_teacher": 2.8,
+    "developing_teacher": 2.0,
+    "ineffective_teacher": 1.5
+  },
+  "risk_indicators": {
+    "high_risk": {
+      "red_domain_count": 2,
+      "declining_trend_months": 6,
+      "informal_eval_concerns": 3
+    },
+    "medium_risk": {
+      "yellow_domain_count": 3,
+      "stagnant_trend_months": 12,
+      "informal_eval_concerns": 2
+    }
+  },
+  "pd_prioritization": {
+    "max_focus_domains": 3,
+    "min_cohort_size": 3,
+    "preferred_cohort_size": 8
+  },
+  "display_settings": {
+    "primary_domains": ["III-B", "III-C", "II-B"],
+    "board_focus_domains": ["III-B", "III-C"],
+    "color_codes": {
+      "green": "#28a745",
+      "yellow": "#ffc107", 
+      "red": "#dc3545"
+    }
+  }
+}

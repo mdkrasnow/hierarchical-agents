@@ -1,0 +1,142 @@
+# Scoring Rubric for Multi-Agent Review System
+# Version 1.0
+# 
+# This rubric evaluates answers based on information coverage, detail, and writing style
+# IMPORTANT: Factual correctness is explicitly de-emphasized
+
+meta:
+  version: "1.0"
+  description: "Scoring rubric for multi-agent review system evaluating information coverage, detail, and writing style"
+  total_score_range: [0, 100]
+  factual_correctness_note: "This rubric explicitly de-emphasizes factual correctness in favor of coverage, detail, and style"
+
+# Scoring Dimensions (weights must sum to 100)
+dimensions:
+  
+  # Coverage: 30% weight - Most important dimension
+  coverage:
+    name: "Information Coverage"
+    weight: 30
+    description: "Completeness and breadth of information addressing the question or task"
+    tiers:
+      excellent:        # 90-100 points
+        score_range: [90, 100]
+        description: "Comprehensive coverage of all relevant aspects, addresses question fully, covers edge cases and nuances"
+      good:             # 75-89 points
+        score_range: [75, 89]
+        description: "Good coverage of main points, addresses most relevant aspects, minor gaps in completeness"
+      adequate:         # 60-74 points
+        score_range: [60, 74]
+        description: "Adequate coverage of basic requirements, some important aspects covered but gaps remain"
+      poor:             # 40-59 points
+        score_range: [40, 59]
+        description: "Incomplete coverage, misses several important aspects, addresses question partially"
+      inadequate:       # 0-39 points
+        score_range: [0, 39]
+        description: "Very poor coverage, fails to address most aspects of the question, significant gaps"
+
+  # Detail & Specificity: 25% weight - Second most important
+  detail_specificity:
+    name: "Detail & Specificity"
+    weight: 25
+    description: "Depth of detail, specificity of information, concrete examples and evidence"
+    tiers:
+      excellent:        # 90-100 points
+        score_range: [90, 100]
+        description: "Rich detail with specific examples, concrete evidence, precise terminology, actionable information"
+      good:             # 75-89 points
+        score_range: [75, 89]
+        description: "Good level of detail with some specific examples, mostly concrete information"
+      adequate:         # 60-74 points
+        score_range: [60, 74]
+        description: "Adequate detail level, some specifics provided, mixture of concrete and general information"
+      poor:             # 40-59 points
+        score_range: [40, 59]
+        description: "Limited detail, mostly general statements, few specific examples or evidence"
+      inadequate:       # 0-39 points
+        score_range: [0, 39]
+        description: "Very little detail, vague generalities, lacks specificity and concrete information"
+
+  # Structure & Coherence: 20% weight
+  structure_coherence:
+    name: "Structure & Coherence"
+    weight: 20
+    description: "Logical organization, clear flow of ideas, coherent presentation"
+    tiers:
+      excellent:        # 90-100 points
+        score_range: [90, 100]
+        description: "Exceptionally well-organized, clear logical flow, excellent transitions, easy to follow"
+      good:             # 75-89 points
+        score_range: [75, 89]
+        description: "Well-organized structure, good logical flow, mostly clear presentation"
+      adequate:         # 60-74 points
+        score_range: [60, 74]
+        description: "Reasonable organization, some logical flow, generally coherent but may have minor issues"
+      poor:             # 40-59 points
+        score_range: [40, 59]
+        description: "Poor organization, unclear flow, some incoherent sections, difficult to follow"
+      inadequate:       # 0-39 points
+        score_range: [0, 39]
+        description: "Very poor structure, incoherent presentation, confusing organization"
+
+  # Style & Tone: 15% weight
+  style_tone:
+    name: "Style & Tone"
+    weight: 15
+    description: "Appropriate writing style, professional tone, readability and engagement"
+    tiers:
+      excellent:        # 90-100 points
+        score_range: [90, 100]
+        description: "Excellent writing style, appropriate tone, engaging and professional, highly readable"
+      good:             # 75-89 points
+        score_range: [75, 89]
+        description: "Good writing style, appropriate tone, readable and professional"
+      adequate:         # 60-74 points
+        score_range: [60, 74]
+        description: "Adequate writing style, generally appropriate tone, reasonably readable"
+      poor:             # 40-59 points
+        score_range: [40, 59]
+        description: "Poor writing style, inappropriate tone, difficult to read, unprofessional"
+      inadequate:       # 0-39 points
+        score_range: [0, 39]
+        description: "Very poor writing, highly inappropriate tone, very difficult to read"
+
+  # Instruction Following: 10% weight - Lowest priority
+  instruction_following:
+    name: "Instruction Following"
+    weight: 10
+    description: "Adherence to specific instructions, format requirements, and task constraints"
+    tiers:
+      excellent:        # 90-100 points
+        score_range: [90, 100]
+        description: "Perfect adherence to all instructions, follows format precisely, meets all constraints"
+      good:             # 75-89 points
+        score_range: [75, 89]
+        description: "Good adherence to instructions, follows most requirements, minor deviations"
+      adequate:         # 60-74 points
+        score_range: [60, 74]
+        description: "Adequate instruction following, meets basic requirements, some deviations"
+      poor:             # 40-59 points
+        score_range: [40, 59]
+        description: "Poor instruction following, misses several requirements, significant deviations"
+      inadequate:       # 0-39 points
+        score_range: [0, 39]
+        description: "Fails to follow most instructions, ignores format and constraints"
+
+# Scoring Methodology
+scoring_methodology:
+  calculation: "weighted_average"
+  formula: "sum(dimension_score * dimension_weight / 100) for all dimensions"
+  rounding: "round_to_nearest_integer"
+  minimum_score: 0
+  maximum_score: 100
+
+# Evaluation Guidelines
+evaluation_guidelines:
+  factual_correctness_weight: 0
+  factual_correctness_note: "Factual correctness is explicitly de-emphasized. Focus on how well information is presented, organized, and detailed rather than whether it is factually accurate."
+  bias_considerations: "Evaluate based on information presentation quality, not agreement with evaluator's perspectives"
+  context_sensitivity: "Consider the specific question/task context when evaluating appropriateness of detail and coverage"
+
+# Weight Verification (must sum to 100)
+# Coverage: 30 + Detail: 25 + Structure: 20 + Style: 15 + Instructions: 10 = 100 ✓

@@ -1,0 +1,30 @@
+# Development configuration for hierarchical agents
+# This file contains non-sensitive development-specific settings
+
+app:
+  name: "hierarchical-agents-dev"
+  debug: true
+  dev_mode: true
+  log_level: "DEBUG"
+
+database:
+  pool_min_size: 1
+  pool_max_size: 5
+
+llm:
+  max_concurrent_requests: 5
+  request_timeout: 60.0
+  max_retries: 2
+  retry_delay: 2.0
+
+logging:
+  level: "DEBUG"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+agents:
+  max_parallel_agents: 3
+  default_timeout: 300
+  
+evaluation:
+  batch_size: 10
+  parallel_evaluations: 2

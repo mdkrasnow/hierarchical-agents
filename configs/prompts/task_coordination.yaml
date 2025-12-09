@@ -1,0 +1,112 @@
+name: task_coordination
+description: Template for coordinating tasks between agents
+version: "1.0"
+tags: ["coordination", "task", "delegation"]
+
+template: |
+  # Task Coordination
+
+  ## Task Information
+  **Task ID**: $task_id
+  **Assigned Agent**: $assigned_agent
+  **Priority**: $priority
+  **Deadline**: $deadline
+
+  ## Task Description
+  $task_description
+
+  ## Context and Background
+  $context
+
+  ## Requirements
+  $requirements
+
+  ## Expected Output Format
+  $output_format
+
+  ## Dependencies
+  $dependencies
+
+  ## Success Criteria
+  $success_criteria
+
+  ## Additional Notes
+  $additional_notes
+
+variables:
+  - name: task_id
+    description: "Unique identifier for the task"
+    required: true
+    variable_type: str
+    examples:
+      - "TASK-001"
+      - "CODE-REVIEW-042"
+
+  - name: assigned_agent
+    description: "Type or ID of the agent assigned to this task"
+    required: true
+    variable_type: str
+    examples:
+      - "Code Reviewer Agent"
+      - "Implementation Agent #3"
+
+  - name: priority
+    description: "Priority level of the task"
+    required: true
+    variable_type: str
+    examples:
+      - "High"
+      - "Medium"
+      - "Low"
+      - "Critical"
+
+  - name: deadline
+    description: "Task deadline or time constraint"
+    required: false
+    default_value: "No specific deadline"
+    variable_type: str
+    examples:
+      - "End of day"
+      - "Within 2 hours"
+      - "Next milestone"
+
+  - name: task_description
+    description: "Detailed description of what needs to be accomplished"
+    required: true
+    variable_type: str
+
+  - name: context
+    description: "Background context relevant to the task"
+    required: true
+    variable_type: str
+
+  - name: requirements
+    description: "Specific requirements and constraints"
+    required: true
+    variable_type: str
+
+  - name: output_format
+    description: "Description of expected output format"
+    required: true
+    variable_type: str
+    examples:
+      - "JSON response with findings and recommendations"
+      - "Structured code review with issues list"
+      - "Implementation plan with time estimates"
+
+  - name: dependencies
+    description: "Dependencies or prerequisites for the task"
+    required: false
+    default_value: "No dependencies"
+    variable_type: str
+
+  - name: success_criteria
+    description: "Criteria for determining task success"
+    required: true
+    variable_type: str
+
+  - name: additional_notes
+    description: "Any additional notes or special instructions"
+    required: false
+    default_value: ""
+    variable_type: str

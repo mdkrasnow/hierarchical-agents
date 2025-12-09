@@ -1,0 +1,86 @@
+name: result_synthesis
+description: Template for synthesizing results from multiple agents
+version: "1.0"
+tags: ["synthesis", "coordination", "results", "aggregation"]
+
+template: |
+  # Result Synthesis
+
+  ## Objective
+  Synthesize and consolidate the following results from multiple agents into a unified, coherent response.
+
+  ## Agent Results to Synthesize
+  $agent_results
+
+  ## Synthesis Instructions
+  $synthesis_instructions
+
+  ## Required Analysis
+  Please provide:
+
+  ### 1. Consensus Areas
+  - Identify areas where agents agree
+  - Highlight common findings and recommendations
+  - Note consistent patterns across responses
+
+  ### 2. Conflicts and Disagreements
+  - Point out where agents disagree or contradict each other
+  - Analyze potential reasons for disagreements
+  - Suggest resolution approaches where possible
+
+  ### 3. Unified Recommendations
+  - Provide consolidated recommendations that account for all agent inputs
+  - Prioritize recommendations based on agent consensus and evidence strength
+  - Address any conflicting recommendations with clear reasoning
+
+  ### 4. Information Gaps
+  - Identify areas where information is missing or incomplete
+  - Note questions that need further investigation
+  - Suggest what additional analysis might be needed
+
+  ## Output Requirements
+  $output_format
+
+  ## Quality Criteria
+  $quality_criteria
+
+  ## Confidence Assessment
+  For each major finding or recommendation, provide a confidence level (High/Medium/Low) based on:
+  - Agreement level among agents
+  - Quality of supporting evidence
+  - Complexity and uncertainty of the domain
+
+variables:
+  - name: agent_results
+    description: "Results from different agents that need to be synthesized"
+    required: true
+    variable_type: str
+
+  - name: synthesis_instructions
+    description: "Specific instructions for how to synthesize the results"
+    required: true
+    variable_type: str
+    examples:
+      - "Focus on technical accuracy and implementation feasibility"
+      - "Prioritize security and performance considerations"
+      - "Balance thoroughness with practical constraints"
+
+  - name: output_format
+    description: "Required format for the synthesized output"
+    required: false
+    default_value: "Provide output in clear, structured format with distinct sections for findings, recommendations, and next steps."
+    variable_type: str
+    examples:
+      - "JSON format with structured findings and recommendations"
+      - "Executive summary followed by detailed analysis"
+      - "Prioritized action items with rationale"
+
+  - name: quality_criteria
+    description: "Specific criteria for evaluating synthesis quality"
+    required: false
+    default_value: "Ensure accuracy, completeness, clarity, and actionability of recommendations."
+    variable_type: str
+    examples:
+      - "All major points from agent results are addressed"
+      - "Recommendations are specific and actionable"
+      - "Uncertainties and limitations are clearly stated"

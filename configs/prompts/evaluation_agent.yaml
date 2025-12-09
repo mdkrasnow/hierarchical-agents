@@ -1,0 +1,245 @@
+name: evaluation_agent_prompts
+description: Prompt templates for Danielson evaluation processing
+version: "1.0"
+tags: ["evaluation", "danielson", "analysis"]
+
+templates:
+  - name: domain_analysis
+    description: "Analyze individual domain performance with evidence extraction"
+    template: |
+      You are analyzing a Danielson evaluation domain for evidence-based insights.
+      
+      Domain: $domain_id ($domain_name)
+      Score: $domain_score
+      
+      Evaluation Notes:
+      $domain_notes
+      
+      Please analyze this domain and provide:
+      
+      1. Key strengths demonstrated (specific evidence)
+      2. Areas for growth (actionable concerns)  
+      3. Evidence quotes (direct quotes from notes)
+      4. Growth signals (positive indicators)
+      5. Concern signals (areas needing attention)
+      
+      Format your response as JSON:
+      {
+        "strengths": ["strength1", "strength2"],
+        "growth_areas": ["area1", "area2"], 
+        "evidence_quotes": ["quote1", "quote2"],
+        "growth_signals": ["signal1", "signal2"],
+        "concern_signals": ["signal1", "signal2"],
+        "summary": "Brief 1-2 sentence summary of domain performance"
+      }
+      
+      Focus on extracting actionable, specific insights from the evidence provided.
+    
+    variables:
+      - name: domain_id
+        description: "Danielson domain identifier (e.g., III-B, I-A)"
+        required: true
+        variable_type: str
+      
+      - name: domain_name  
+        description: "Full name of the Danielson domain"
+        required: true
+        variable_type: str
+        
+      - name: domain_score
+        description: "Numeric score for the domain (1-4 scale)"
+        required: false
+        default_value: "Not provided"
+        variable_type: str
+        
+      - name: domain_notes
+        description: "Evaluator notes and observations for this domain"
+        required: true
+        variable_type: str
+
+  - name: risk_detection
+    description: "Detect burnout, disengagement, and leaving risk signals"
+    template: |
+      You are analyzing teacher evaluation text to detect risk signals.
+      
+      Evaluation Text:
+      $evaluation_text
+      
+      Please analyze this text for indicators of:
+      
+      1. **Burnout signals**: Overwhelm, stress, emotional exhaustion
+      2. **Disengagement signals**: Lack of enthusiasm, going through motions
+      3. **Leaving risk**: Considering career change, job dissatisfaction
+      
+      For each category, provide:
+      - Specific evidence from the text (direct quotes)
+      - Severity level (low/medium/high)
+      - Contextual explanation
+      
+      Format as JSON:
+      {
+        "burnout": {
+          "indicators": ["evidence1", "evidence2"],
+          "severity": "low|medium|high",
+          "context": "Brief explanation"
+        },
+        "disengagement": {
+          "indicators": ["evidence1", "evidence2"], 
+          "severity": "low|medium|high",
+          "context": "Brief explanation"
+        },
+        "leaving_risk": {
+          "indicators": ["evidence1", "evidence2"],
+          "severity": "low|medium|high", 
+          "context": "Brief explanation"
+        },
+        "confidence_score": 0.8
+      }
+      
+      Be conservative - only flag clear indicators, not normal challenges.
+    
+    variables:
+      - name: evaluation_text
+        description: "Complete evaluation text including notes and observations"
+        required: true
+        variable_type: str
+
+  - name: evidence_extraction
+    description: "Extract key evidence snippets from evaluation text"
+    template: |
+      You are extracting key evidence from a teacher evaluation.
+      
+      Evaluation Content:
+      $evaluation_content
+      
+      Please extract the most important evidence snippets that demonstrate:
+      
+      1. **Teaching practices** (what the teacher did)
+      2. **Student responses** (how students reacted/engaged)
+      3. **Learning environment** (classroom culture/management)
+      4. **Professional behaviors** (preparation, reflection, growth)
+      
+      Guidelines:
+      - Focus on specific, observable behaviors
+      - Include direct quotes when possible
+      - Prioritize evidence that shows impact on learning
+      - Limit to top 10 most significant pieces
+      
+      Format as JSON:
+      {
+        "teaching_practices": ["evidence1", "evidence2"],
+        "student_responses": ["evidence1", "evidence2"],
+        "learning_environment": ["evidence1", "evidence2"],
+        "professional_behaviors": ["evidence1", "evidence2"],
+        "top_evidence_overall": ["most important overall evidence"]
+      }
+    
+    variables:
+      - name: evaluation_content
+        description: "Raw evaluation content including all notes and observations"
+        required: true
+        variable_type: str
+
+  - name: strengths_concerns
+    description: "Extract key strengths and concerns from evaluation"  
+    template: |
+      You are analyzing a teacher evaluation to identify key strengths and concerns.
+      
+      Evaluation Data:
+      $evaluation_data
+      
+      Please identify:
+      
+      **Key Strengths** (what this teacher does well):
+      - Specific skills and practices
+      - Evidence-based observations
+      - Areas of excellence or growth
+      
+      **Key Concerns** (areas needing attention):
+      - Specific skill gaps or issues
+      - Areas for professional development
+      - Performance concerns requiring support
+      
+      Guidelines:
+      - Be specific and actionable
+      - Base conclusions on evidence
+      - Focus on teaching practice impact
+      - Limit to 3-5 items per category
+      
+      Format as JSON:
+      {
+        "key_strengths": [
+          {
+            "strength": "Clear description",
+            "evidence": "Supporting evidence",
+            "impact": "How it benefits learning"
+          }
+        ],
+        "key_concerns": [
+          {
+            "concern": "Clear description", 
+            "evidence": "Supporting evidence",
+            "action_needed": "Suggested development area"
+          }
+        ]
+      }
+    
+    variables:
+      - name: evaluation_data
+        description: "Complete evaluation including scores, notes, and observations"
+        required: true
+        variable_type: str
+
+  - name: pd_recommendations
+    description: "Generate professional development recommendations"
+    template: |
+      Based on this teacher's evaluation results, recommend targeted professional development.
+      
+      Domain Performance:
+      $domain_performance
+      
+      Key Concerns:
+      $key_concerns
+      
+      Risk Signals:
+      $risk_signals
+      
+      Please recommend:
+      
+      1. **Priority PD Areas** (1-3 focus domains)
+      2. **Specific Skills** to develop within each area
+      3. **PD Formats** (workshop, coaching, observation, etc.)
+      4. **Timeline** and intensity recommendations
+      5. **Success Indicators** (how to measure progress)
+      
+      Format as JSON:
+      {
+        "priority_domains": ["domain1", "domain2"],
+        "skill_development": {
+          "domain1": ["skill1", "skill2"],
+          "domain2": ["skill1", "skill2"] 
+        },
+        "recommended_formats": ["format1", "format2"],
+        "timeline": "Suggested timeline",
+        "success_indicators": ["indicator1", "indicator2"],
+        "urgency_level": "low|medium|high"
+      }
+      
+      Focus on actionable, specific development recommendations.
+    
+    variables:
+      - name: domain_performance
+        description: "Summary of performance across Danielson domains"
+        required: true
+        variable_type: str
+        
+      - name: key_concerns
+        description: "List of identified concerns from evaluation"
+        required: true
+        variable_type: str
+        
+      - name: risk_signals
+        description: "Any detected risk signals (burnout, disengagement, etc.)"
+        required: false
+        default_value: "None detected"
+        variable_type: str

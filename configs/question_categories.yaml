@@ -1,0 +1,155 @@
+# Question Categories Configuration
+# Defines categories, tags, and metadata for the evaluation question dataset
+
+version: "1.0"
+description: "Configuration for question dataset categorization and filtering"
+
+# Main categories with descriptions and typical rubric focus
+categories:
+  hierarchical-agents:
+    display_name: "Hierarchical Multi-Agent Systems"
+    description: "Questions about designing, implementing, and managing hierarchical multi-agent systems"
+    typical_difficulty: ["intermediate", "advanced", "expert"]
+    primary_rubric_focus: ["coverage", "detail_specificity"]
+    common_tags: ["architecture", "coordination", "communication", "fault-tolerance", "optimization"]
+    
+  supabase-sql:
+    display_name: "Supabase & SQL"
+    description: "Questions about database design, SQL optimization, and Supabase-specific features"
+    typical_difficulty: ["beginner", "intermediate", "advanced"]
+    primary_rubric_focus: ["detail_specificity", "structure_coherence"]
+    common_tags: ["schema-design", "performance", "RLS", "real-time", "analytics"]
+    
+  general-writing:
+    display_name: "Technical Writing & Communication"
+    description: "Questions about writing, documentation, and technical communication"
+    typical_difficulty: ["beginner", "intermediate", "advanced"]
+    primary_rubric_focus: ["style_tone", "structure_coherence"]
+    common_tags: ["documentation", "communication", "best-practices", "clarity"]
+
+# Difficulty levels with descriptions
+difficulty_levels:
+  beginner:
+    description: "Basic concepts and straightforward implementations"
+    expected_score_range: [60, 85]
+    typical_length: "medium"
+    
+  intermediate:
+    description: "Moderate complexity requiring some experience and analysis"
+    expected_score_range: [50, 80]
+    typical_length: "detailed"
+    
+  advanced:
+    description: "Complex problems requiring deep knowledge and careful consideration"
+    expected_score_range: [40, 75]
+    typical_length: "comprehensive"
+    
+  expert:
+    description: "Highly complex problems requiring expert-level understanding"
+    expected_score_range: [35, 70]
+    typical_length: "comprehensive"
+
+# Style requirements templates
+style_templates:
+  structured_guide:
+    format_description: "Well-organized guide with clear sections and subsections"
+    expected_elements: ["introduction", "main_sections", "examples", "conclusion"]
+    
+  technical_specification:
+    format_description: "Precise technical document with detailed specifications"
+    expected_elements: ["requirements", "specifications", "implementation_details", "examples"]
+    
+  comparison_analysis:
+    format_description: "Analytical comparison of different approaches or options"
+    expected_elements: ["criteria", "comparisons", "trade_offs", "recommendations"]
+    
+  tutorial:
+    format_description: "Step-by-step instructional content"
+    expected_elements: ["prerequisites", "steps", "examples", "verification"]
+    
+  comprehensive_guide:
+    format_description: "Thorough coverage of a topic with multiple aspects"
+    expected_elements: ["overview", "detailed_sections", "best_practices", "examples"]
+
+# Tag taxonomy for consistent tagging
+tag_taxonomy:
+  technical_areas:
+    - "architecture"
+    - "design-patterns" 
+    - "performance"
+    - "security"
+    - "testing"
+    - "optimization"
+    
+  system_types:
+    - "multi-agent-systems"
+    - "distributed-systems"
+    - "real-time"
+    - "database-systems"
+    
+  skill_types:
+    - "communication"
+    - "coordination"
+    - "error-handling"
+    - "monitoring"
+    - "debugging"
+    
+  domain_specific:
+    hierarchical_agents:
+      - "hierarchical-structure"
+      - "agent-coordination"
+      - "task-decomposition"
+      - "fault-tolerance"
+      - "resource-allocation"
+      
+    supabase_sql:
+      - "schema-design"
+      - "RLS"
+      - "triggers"
+      - "functions"
+      - "migration"
+      - "indexing"
+      
+    writing:
+      - "technical-writing"
+      - "documentation"
+      - "user-stories"
+      - "API-documentation"
+      - "communication-strategy"
+
+# Rubric focus guidelines by category
+rubric_focus_guidelines:
+  hierarchical-agents:
+    primary: ["coverage", "detail_specificity"]
+    secondary: ["structure_coherence"]
+    rationale: "Technical complexity requires comprehensive coverage and specific implementation details"
+    
+  supabase-sql:
+    primary: ["detail_specificity", "structure_coherence"]
+    secondary: ["coverage"]
+    rationale: "Database work needs precise details and well-organized presentation"
+    
+  general-writing:
+    primary: ["style_tone", "structure_coherence"]
+    secondary: ["coverage"]
+    rationale: "Writing quality and organization are paramount for communication effectiveness"
+
+# Quality benchmarks by category
+quality_expectations:
+  hierarchical-agents:
+    excellent_threshold: 85
+    good_threshold: 75
+    adequate_threshold: 65
+    typical_challenges: ["complexity management", "technical depth", "practical applicability"]
+    
+  supabase-sql:
+    excellent_threshold: 88
+    good_threshold: 78
+    adequate_threshold: 68
+    typical_challenges: ["SQL accuracy", "performance considerations", "security implications"]
+    
+  general-writing:
+    excellent_threshold: 90
+    good_threshold: 80
+    adequate_threshold: 70
+    typical_challenges: ["clarity", "engagement", "actionability"]

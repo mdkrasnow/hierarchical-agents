@@ -1,0 +1,28 @@
+# Core async database connectivity
+asyncpg>=0.29.0
+
+# Data validation and serialization
+pydantic>=2.0.0
+
+# Optional: SQLAlchemy with async support (if ORM is preferred later)
+# sqlalchemy[asyncio]>=2.0.0
+
+# Development and testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+
+# Code quality
+ruff>=0.1.0
+black>=23.0.0
+mypy>=1.0.0
+
+# CLI utilities
+typer>=0.9.0
+rich>=13.0.0
+
+# Optional: Data analysis utilities
+# pandas>=2.0.0
+# numpy>=1.24.0
+
+# Environment management
+python-dotenv>=1.0.0
