@@ -1,0 +1,51 @@
+{
+  "summary": {
+    "run_id": "eval_20251208_201403_f683cd08",
+    "total_runtime_seconds": 0.11088395118713379,
+    "total_questions": 1,
+    "successful_generations": 1,
+    "successful_scorings": 0,
+    "generation_success_rate": 1.0,
+    "scoring_success_rate": 0.0,
+    "avg_generation_time_ms": 101.25494003295898,
+    "avg_score": 0,
+    "total_errors": 0,
+    "config": {
+      "model": "mock",
+      "strategy": "llm_generic",
+      "n_samples": 1,
+      "temperature": 0.7
+    }
+  },
+  "questions_processed": [
+    "writing-005"
+  ],
+  "generation_results": [
+    {
+      "answer": "Mock LLM response",
+      "success": true,
+      "generation_id": "2d5edce1-cb1f-4665-ad35-b392d192d35c",
+      "strategy_used": "llm_generic",
+      "generation_time_ms": 101.25494003295898,
+      "confidence_score": 0.7000000000000001,
+      "estimated_quality": "good",
+      "reasoning_trace": [
+        "Starting LLM-based answer generation",
+        "Using direct prompting strategy",
+        "Generation completed successfully with 3 words"
+      ],
+      "intermediate_outputs": {
+        "prompt": "Please answer the following question clearly and completely.\n\nContext: question_id: writing-005; category: general-writing; difficulty: intermediate; tags: ['agile', 'requirements', 'user-stories', 'software-development']\n\nQuestion: Create guidelines for writing effective user stories in agile development. Include criteria for good stories, common pitfalls, and examples of well-written vs poorly-written stories.\n\nAnswer:"
+      },
+      "error_message": null,
+      "warnings": [],
+      "llm_calls_made": 1,
+      "total_tokens_used": 75,
+      "agent_outputs": {},
+      "coordination_details": null
+    }
+  ],
+  "scoring_results": [],
+  "errors": [],
+  "timestamp": "2025-12-08T20:14:03.241775"
+}

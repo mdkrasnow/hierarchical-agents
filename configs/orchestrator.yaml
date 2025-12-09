@@ -1,0 +1,284 @@
+# Hierarchical Orchestrator Configuration
+# 
+# This file configures the behavior of the HierarchicalOrchestrator
+# for different deployment scenarios and user roles.
+
+# Default concurrency limits for agent execution
+concurrency:
+  # Evaluation agent can handle many parallel calls since they're independent
+  max_concurrent_evaluations: 10
+  
+  # Teacher agent needs more memory/processing, limit concurrent instances
+  max_concurrent_teachers: 5
+  
+  # School agent does complex aggregation, conservative limit
+  max_concurrent_schools: 3
+  
+  # District agent is single instance per organization
+  max_concurrent_districts: 1
+
+# Data scope and filtering
+data_scope:
+  # How far back to look for evaluations by default
+  max_history_months: 24
+  
+  # Include informal evaluations in analysis
+  include_informal_evaluations: true
+  
+  # Include archived/deleted evaluations
+  include_archived_evaluations: false
+  
+  # Minimum number of evaluations needed for meaningful teacher analysis
+  min_evaluations_per_teacher: 1
+  
+  # Minimum number of teachers needed for meaningful school analysis  
+  min_teachers_per_school: 1
+
+# Terminal output configuration
+terminal:
+  # Show progress bars and status updates during execution
+  show_progress: true
+  
+  # Display high-level summary before detailed results
+  summary_first: true
+  
+  # Use emoji and colors in terminal output
+  rich_output: true
+  
+  # Verbosity level for terminal output
+  # quiet: minimal output
+  # normal: standard progress and results
+  # verbose: detailed execution information
+  # debug: all internal details
+  verbosity: normal
+
+# Agent-specific configurations
+agents:
+  evaluation_agent:
+    # LLM parameters
+    llm_temperature: 0.3
+    llm_max_tokens: 2048
+    llm_retry_count: 3
+    
+    # Evaluation analysis settings
+    max_evidence_snippets: 8
+    include_domain_analysis: true
+    include_risk_detection: true
+    
+    # Performance optimizations
+    enable_batch_processing: true
+    batch_size: 5
+
+  teacher_agent:
+    # LLM parameters  
+    llm_temperature: 0.4
+    llm_max_tokens: 3072
+    llm_retry_count: 3
+    
+    # Teacher analysis settings
+    pd_focus_limit: 3
+    max_narrative_length: 200
+    include_growth_stories: true
+    include_risk_analysis: true
+    
+    # Evidence aggregation
+    max_evidence_quotes: 5
+    prioritize_recent_evidence: true
+
+  school_agent:
+    # LLM parameters
+    llm_temperature: 0.5
+    llm_max_tokens: 4096
+    llm_retry_count: 3
+    
+    # School analysis settings
+    max_cohort_size: 8
+    min_cohort_size: 3
+    include_teacher_rankings: false
+    
+    # Narrative generation
+    max_principal_stories: 3
+    max_supervisor_stories: 2
+    include_celebration_stories: true
+
+  district_agent:
+    # LLM parameters
+    llm_temperature: 0.6
+    llm_max_tokens: 5120
+    llm_retry_count: 3
+    
+    # District analysis settings
+    max_board_stories: 6
+    include_school_rankings: true
+    include_equity_analysis: true
+    
+    # Strategic planning
+    max_strategic_recommendations: 5
+    max_pilot_opportunities: 3
+    focus_on_board_communication: true
+
+# Role-based execution profiles
+# These override defaults based on user role
+role_profiles:
+  principal:
+    # Principals focus on their school(s)
+    agents_to_run: ["evaluation", "teacher", "school"]
+    primary_output: "school_summary"
+    
+    # Adjusted for school-level focus
+    concurrency:
+      max_concurrent_evaluations: 8
+      max_concurrent_teachers: 4
+      max_concurrent_schools: 2
+    
+    # Principal-specific output preferences
+    terminal:
+      show_pd_cohorts: true
+      show_teacher_support_needs: true
+      show_celebration_opportunities: true
+    
+    data_scope:
+      # Principals typically look at more recent data more frequently
+      max_history_months: 18
+
+  superintendent:
+    # Superintendents get full hierarchy analysis
+    agents_to_run: ["evaluation", "teacher", "school", "district"]
+    primary_output: "district_summary"
+    
+    # Higher concurrency for district-wide analysis
+    concurrency:
+      max_concurrent_evaluations: 15
+      max_concurrent_teachers: 8
+      max_concurrent_schools: 4
+    
+    # Superintendent-specific output preferences
+    terminal:
+      show_board_stories: true
+      show_strategic_recommendations: true
+      show_school_comparisons: true
+      show_equity_analysis: true
+    
+    data_scope:
+      # Superintendents may need longer historical view
+      max_history_months: 24
+
+  evaluator:
+    # Evaluators typically work at teacher level
+    agents_to_run: ["evaluation", "teacher"]
+    primary_output: "teacher_summary"
+    
+    # Lower concurrency for individual use
+    concurrency:
+      max_concurrent_evaluations: 5
+      max_concurrent_teachers: 2
+    
+    # Evaluator-specific preferences
+    terminal:
+      show_individual_evaluation_details: true
+      show_teacher_development_needs: true
+    
+    data_scope:
+      # Evaluators might focus on recent evaluations
+      max_history_months: 12
+
+# Environment-specific overrides
+environments:
+  development:
+    # Lower concurrency for development environment
+    concurrency:
+      max_concurrent_evaluations: 3
+      max_concurrent_teachers: 2
+      max_concurrent_schools: 1
+    
+    # More verbose output for debugging
+    terminal:
+      verbosity: verbose
+      show_agent_metrics: true
+    
+    # Enable all debug features
+    agents:
+      evaluation_agent:
+        enable_metrics: true
+        log_level: DEBUG
+      teacher_agent:
+        enable_metrics: true
+        log_level: DEBUG
+
+  production:
+    # Optimized for production performance
+    concurrency:
+      max_concurrent_evaluations: 20
+      max_concurrent_teachers: 10
+      max_concurrent_schools: 5
+    
+    # Clean output for production use
+    terminal:
+      verbosity: normal
+      rich_output: false
+    
+    # Production optimization
+    agents:
+      evaluation_agent:
+        enable_metrics: false
+        log_level: INFO
+        llm_retry_count: 2  # Fail faster in production
+
+  testing:
+    # Minimal configuration for testing
+    concurrency:
+      max_concurrent_evaluations: 1
+      max_concurrent_teachers: 1
+      max_concurrent_schools: 1
+    
+    terminal:
+      show_progress: false
+      summary_first: false
+    
+    # Deterministic settings for testing
+    agents:
+      evaluation_agent:
+        llm_temperature: 0.0
+      teacher_agent:
+        llm_temperature: 0.0
+      school_agent:
+        llm_temperature: 0.0
+      district_agent:
+        llm_temperature: 0.0
+
+# Performance and monitoring
+performance:
+  # Enable performance metrics collection
+  enable_metrics: true
+  
+  # Log slow operations (in milliseconds)
+  slow_operation_threshold: 5000
+  
+  # Memory usage monitoring
+  enable_memory_monitoring: false
+  
+  # Execution timeout (in seconds)
+  execution_timeout: 300
+  
+  # Retry configuration
+  retry_on_failure: true
+  max_retries: 2
+  retry_delay_seconds: 1
+
+# Logging configuration
+logging:
+  # Default log level
+  level: INFO
+  
+  # Log format
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Enable structured logging
+  structured: false
+  
+  # Log to file in addition to console
+  file_logging:
+    enabled: false
+    path: "logs/orchestrator.log"
+    rotation: "daily"
+    retention: "7 days"

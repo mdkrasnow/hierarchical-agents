@@ -1,0 +1,259 @@
+name: teacher_agent_prompts
+description: Prompt templates for teacher evaluation aggregation and narrative synthesis
+version: "1.0"
+tags: ["teacher", "aggregation", "narrative", "pd_recommendations"]
+
+templates:
+  - name: teacher_narratives
+    description: "Synthesize evidence-backed narratives for teacher performance"
+    template: |
+      You are creating comprehensive narratives for a teacher based on multiple evaluations.
+      
+      Teacher: $teacher_name
+      Number of Evaluations: $evaluation_count
+      
+      Domain Analysis:
+      $domain_analysis
+      
+      Risk Assessment:
+      $risk_analysis
+      
+      Professional Development Recommendations:
+      $pd_recommendations
+      
+      Key Evidence:
+      $evidence_highlights
+      
+      Please create three evidence-backed narratives:
+      
+      1. **Growth Story** (2-3 sentences highlighting strengths and positive trends)
+      2. **Concern Story** (2-3 sentences addressing areas needing attention, if any)
+      3. **Overall Summary** (1-2 sentences for quick overview - under 40 words)
+      
+      Guidelines:
+      - Base all statements on the provided evidence and analysis
+      - Be specific and actionable, not generic
+      - Use positive, professional language even when addressing concerns
+      - Focus on observable teaching behaviors and student impact
+      - If no concerns exist, the concern story can be null
+      
+      Format as JSON:
+      {
+        "growth_story": "Evidence-backed positive narrative highlighting teacher strengths...",
+        "concern_story": "Professional narrative addressing development areas..." or null,
+        "overall_summary": "Concise 1-2 sentence summary under 40 words"
+      }
+    
+    variables:
+      - name: teacher_name
+        description: "Name of the teacher being analyzed"
+        required: true
+        variable_type: str
+      
+      - name: evaluation_count
+        description: "Number of evaluations aggregated"
+        required: true
+        variable_type: int
+        
+      - name: domain_analysis
+        description: "Summary of performance across Danielson domains"
+        required: true
+        variable_type: str
+        
+      - name: risk_analysis
+        description: "Risk assessment including burnout and retention concerns"
+        required: true
+        variable_type: str
+        
+      - name: pd_recommendations
+        description: "Professional development recommendations with rationale"
+        required: true
+        variable_type: str
+        
+      - name: evidence_highlights
+        description: "Key evidence snippets from evaluations"
+        required: true
+        variable_type: str
+
+  - name: pd_synthesis
+    description: "Generate comprehensive professional development plan"
+    template: |
+      Based on the teacher's evaluation patterns, create a comprehensive PD plan.
+      
+      Teacher Performance Data:
+      $performance_data
+      
+      Identified Weak Domains:
+      $weak_domains
+      
+      Recurring Concerns:
+      $recurring_concerns
+      
+      Organizational PD Options:
+      $available_pd_options
+      
+      Please recommend:
+      
+      1. **Priority Focus Areas** (1-3 most critical domains)
+      2. **Specific Development Topics** within each area
+      3. **Recommended PD Formats** (workshop, coaching, observation, etc.)
+      4. **Implementation Timeline** (immediate, short-term, long-term)
+      5. **Success Metrics** (how to measure progress)
+      6. **Support Level** needed (minimal, moderate, intensive)
+      
+      Format as JSON:
+      {
+        "priority_focus_areas": ["area1", "area2", "area3"],
+        "development_topics": {
+          "area1": ["topic1", "topic2"],
+          "area2": ["topic1", "topic2"]
+        },
+        "recommended_formats": ["format1", "format2", "format3"],
+        "timeline": {
+          "immediate": ["action1", "action2"],
+          "short_term": ["action1", "action2"], 
+          "long_term": ["action1", "action2"]
+        },
+        "success_metrics": ["metric1", "metric2", "metric3"],
+        "support_level": "minimal|moderate|intensive",
+        "rationale": "Brief explanation of recommendations"
+      }
+    
+    variables:
+      - name: performance_data
+        description: "Aggregated domain scores and trends"
+        required: true
+        variable_type: str
+        
+      - name: weak_domains
+        description: "Domains consistently showing low performance"
+        required: true
+        variable_type: str
+        
+      - name: recurring_concerns
+        description: "Concerns that appear across multiple evaluations"
+        required: true
+        variable_type: str
+        
+      - name: available_pd_options
+        description: "PD resources available in the organization"
+        required: false
+        default_value: "Standard professional development options"
+        variable_type: str
+
+  - name: risk_assessment
+    description: "Analyze teacher risk factors and retention concerns"
+    template: |
+      Analyze the teacher's risk profile for retention and wellness concerns.
+      
+      Teacher: $teacher_name
+      
+      Burnout Indicators:
+      $burnout_signals
+      
+      Performance Trends:
+      $performance_trends
+      
+      Evaluation Comments:
+      $evaluation_comments
+      
+      Please assess:
+      
+      1. **Overall Risk Level** (low/medium/high)
+      2. **Primary Risk Factors** (specific concerns)
+      3. **Risk Trend** (improving/stable/worsening)
+      4. **Intervention Recommendations** (if risk is medium/high)
+      5. **Early Warning Signs** to monitor
+      6. **Protective Factors** (strengths that mitigate risk)
+      
+      Format as JSON:
+      {
+        "overall_risk_level": "low|medium|high",
+        "primary_risk_factors": ["factor1", "factor2"],
+        "risk_trend": "improving|stable|worsening",
+        "intervention_recommendations": ["rec1", "rec2"],
+        "early_warning_signs": ["sign1", "sign2"],
+        "protective_factors": ["factor1", "factor2"],
+        "confidence_level": 0.8,
+        "recommendations_urgency": "low|medium|high"
+      }
+    
+    variables:
+      - name: teacher_name
+        description: "Name of teacher being assessed"
+        required: true
+        variable_type: str
+        
+      - name: burnout_signals
+        description: "Detected burnout indicators across evaluations"
+        required: true
+        variable_type: str
+        
+      - name: performance_trends
+        description: "Performance trends over time"
+        required: true
+        variable_type: str
+        
+      - name: evaluation_comments
+        description: "Relevant comments from evaluations"
+        required: true
+        variable_type: str
+
+  - name: exemplar_analysis
+    description: "Analyze teacher for exemplar status and recognition"
+    template: |
+      Evaluate this teacher for exemplar recognition and leadership potential.
+      
+      Teacher Performance Summary:
+      $performance_summary
+      
+      Domain Excellence:
+      $domain_excellence
+      
+      Evidence of Impact:
+      $impact_evidence
+      
+      Growth Trajectory:
+      $growth_patterns
+      
+      Please assess:
+      
+      1. **Exemplar Qualifications** (meets criteria?)
+      2. **Areas of Excellence** (specific strengths)
+      3. **Leadership Potential** (capacity to mentor others)
+      4. **Impact Evidence** (student/colleague outcomes)
+      5. **Recognition Recommendations** (how to celebrate/utilize)
+      6. **Mentorship Opportunities** (how they could help others)
+      
+      Format as JSON:
+      {
+        "meets_exemplar_criteria": true,
+        "exemplar_score": 0.85,
+        "areas_of_excellence": ["area1", "area2", "area3"],
+        "leadership_potential": "high|medium|low",
+        "impact_evidence": ["evidence1", "evidence2"],
+        "recognition_recommendations": ["rec1", "rec2"],
+        "mentorship_opportunities": ["opportunity1", "opportunity2"],
+        "rationale": "Brief explanation of exemplar assessment"
+      }
+    
+    variables:
+      - name: performance_summary
+        description: "Overall performance across all domains"
+        required: true
+        variable_type: str
+        
+      - name: domain_excellence
+        description: "Domains where teacher shows exceptional performance"
+        required: true
+        variable_type: str
+        
+      - name: impact_evidence
+        description: "Evidence of positive impact on students/colleagues"
+        required: true
+        variable_type: str
+        
+      - name: growth_patterns
+        description: "Teacher's growth and improvement patterns"
+        required: true
+        variable_type: str

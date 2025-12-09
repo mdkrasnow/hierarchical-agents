@@ -1,0 +1,15 @@
+[
+  {
+    "question_id": "writing-005",
+    "question": "Create guidelines for writing effective user stories in agile development. Include criteria for good stories, common pitfalls, and examples of well-written vs poorly-written stories.",
+    "category": "general-writing",
+    "difficulty": "intermediate",
+    "answer": "Mock LLM response",
+    "generation_success": true,
+    "generation_time_ms": 101.25494003295898,
+    "generation_error": null,
+    "score": null,
+    "score_tier": null,
+    "processing_time_ms": 101.27520561218262
+  }
+]

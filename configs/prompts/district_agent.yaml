@@ -1,0 +1,293 @@
+name: district_agent_prompts
+description: Prompt templates for district-level analysis and strategic narrative synthesis
+version: "1.0"
+tags: ["district", "strategic", "board", "superintendent", "system_analysis"]
+
+templates:
+  - name: district_narratives
+    description: "Synthesize strategic district narratives and board-ready stories"
+    template: |
+      You are creating comprehensive strategic narratives for a school district based on aggregated school performance data.
+      
+      Organization: {{ organization_name }}
+      Scope: {{ school_count }} schools, {{ teacher_count }} teachers
+      
+      District Overview:
+      {{ district_overview }}
+      
+      Performance Analysis:
+      {{ performance_analysis }}
+      
+      Strategic Priorities:
+      {{ strategic_priorities }}
+      
+      Risk Assessment:
+      {{ risk_assessment }}
+      
+      Professional Development Strategy:
+      {{ pd_strategy }}
+      
+      School Highlights:
+      {{ school_highlights }}
+      
+      Please create comprehensive district-level narratives that provide strategic insights for superintendent and board leadership:
+      
+      1. **District Strengths** (2-3 bullet points): Clear, specific areas where the district excels
+      2. **District Needs** (2-3 bullet points): Priority areas requiring strategic attention and resources
+      3. **Executive Summary** (1-2 paragraphs): Concise overview for board presentation - under 150 words
+      4. **Recommended PD Strategy** (3-5 items): Strategic professional development initiatives
+      5. **Board Stories** (2-4 items): Data-backed stories ready for board communication
+      6. **Celebration Opportunities** (2-3 items): Success stories and recognition opportunities
+      7. **Resource Priorities** (2-4 items): Strategic resource allocation recommendations
+      
+      Guidelines:
+      - Focus on system-level strategic insights, not individual school details
+      - Use data to support all recommendations and narratives
+      - Balance recognition of strengths with honest assessment of needs
+      - Provide actionable, strategic recommendations appropriate for superintendent/board level
+      - Use professional, executive-level language
+      - Ensure board stories include supporting data and clear calls to action when appropriate
+      
+      Format your response as JSON with these exact fields:
+      {
+        "district_strengths": ["strength 1", "strength 2", "strength 3"],
+        "district_needs": ["need 1", "need 2", "need 3"],
+        "executive_summary": "Concise 1-2 paragraph summary under 150 words for board presentation",
+        "recommended_pd_strategy": ["strategy 1", "strategy 2", "strategy 3", "strategy 4", "strategy 5"],
+        "board_stories": [
+          {
+            "title": "Story Title",
+            "narrative": "2-3 sentences with data-backed insights",
+            "story_type": "positive|concern|neutral",
+            "supporting_data": {"key": "value"},
+            "call_to_action": "Optional action item for board"
+          }
+        ],
+        "celebration_opportunities": ["opportunity 1", "opportunity 2", "opportunity 3"],
+        "resource_priorities": ["priority 1", "priority 2", "priority 3", "priority 4"]
+      }
+    
+    variables:
+      - name: organization_name
+        description: "Name of the school district/organization"
+        required: true
+        variable_type: str
+      
+      - name: school_count
+        description: "Number of schools in the analysis"
+        required: true
+        variable_type: int
+        
+      - name: teacher_count
+        description: "Total number of teachers analyzed across all schools"
+        required: true
+        variable_type: int
+        
+      - name: district_overview
+        description: "High-level overview of district scope and risk profile"
+        required: true
+        variable_type: str
+        
+      - name: performance_analysis
+        description: "Analysis of district-wide performance strengths and areas for improvement"
+        required: true
+        variable_type: str
+        
+      - name: strategic_priorities
+        description: "Key strategic priorities identified for the district"
+        required: true
+        variable_type: str
+        
+      - name: risk_assessment
+        description: "District-level risk analysis and stability indicators"
+        required: true
+        variable_type: str
+        
+      - name: pd_strategy
+        description: "Professional development needs and strategic opportunities"
+        required: true
+        variable_type: str
+        
+      - name: school_highlights
+        description: "Notable school performance and collaboration opportunities"
+        required: true
+        variable_type: str
+
+  - name: board_story_synthesis
+    description: "Generate specific board-ready stories from district analysis"
+    template: |
+      Create compelling, data-backed stories for school board presentation based on district analysis.
+      
+      District Context:
+      {{ district_context }}
+      
+      Performance Data:
+      {{ performance_data }}
+      
+      Strategic Focus Areas:
+      {{ focus_areas }}
+      
+      Success Stories:
+      {{ success_stories }}
+      
+      Challenge Areas:
+      {{ challenge_areas }}
+      
+      Please create 3-5 board-ready stories that:
+      
+      1. **Balance positive recognition with honest challenge assessment**
+      2. **Include specific supporting data and metrics**
+      3. **Provide clear calls to action where appropriate**
+      4. **Are appropriate for public board meeting discussion**
+      5. **Tell a compelling narrative that engages board members**
+      
+      Story Types to Include:
+      - At least 1 positive story highlighting district/school success
+      - At least 1 strategic story about initiatives or improvements needed
+      - Optional concern story if significant issues require board attention
+      
+      Format as JSON:
+      {
+        "board_stories": [
+          {
+            "title": "Compelling title for board agenda",
+            "narrative": "2-3 sentences telling the story with specific data",
+            "story_type": "positive|concern|neutral",
+            "supporting_data": {
+              "metric_1": "value",
+              "metric_2": "value",
+              "schools_involved": ["school1", "school2"]
+            },
+            "call_to_action": "Specific action for board to consider (optional)"
+          }
+        ],
+        "presentation_notes": [
+          "Note 1 about how to present these stories effectively",
+          "Note 2 about board member engagement"
+        ]
+      }
+    
+    variables:
+      - name: district_context
+        description: "District name, size, and key contextual information"
+        required: true
+        variable_type: str
+        
+      - name: performance_data
+        description: "Key performance metrics and trends"
+        required: true
+        variable_type: str
+        
+      - name: focus_areas
+        description: "Strategic focus areas and priorities"
+        required: true
+        variable_type: str
+        
+      - name: success_stories
+        description: "Notable successes and achievements to highlight"
+        required: true
+        variable_type: str
+        
+      - name: challenge_areas
+        description: "Areas requiring attention and strategic intervention"
+        required: true
+        variable_type: str
+
+  - name: strategic_pd_planning
+    description: "Develop comprehensive district-wide professional development strategy"
+    template: |
+      Develop a strategic professional development plan for the district based on aggregated needs analysis.
+      
+      District PD Needs Assessment:
+      {{ pd_needs_analysis }}
+      
+      Cross-School Opportunities:
+      {{ cross_school_opportunities }}
+      
+      Resource Constraints:
+      {{ resource_constraints }}
+      
+      Existing PD Infrastructure:
+      {{ existing_infrastructure }}
+      
+      Strategic Goals:
+      {{ strategic_goals }}
+      
+      Please develop a comprehensive PD strategy that includes:
+      
+      1. **System-Wide Initiatives** (3-5 major initiatives that address common needs)
+      2. **Cross-School Cohorts** (specific opportunities for schools to collaborate)
+      3. **Implementation Timeline** (prioritized sequence for rollout)
+      4. **Resource Requirements** (staffing, budget, infrastructure needs)
+      5. **Success Metrics** (how to measure impact and effectiveness)
+      6. **Sustainability Plan** (how to maintain momentum beyond initial rollout)
+      
+      Guidelines:
+      - Prioritize initiatives that serve multiple schools
+      - Balance immediate needs with long-term strategic development
+      - Consider teacher capacity and change management
+      - Leverage existing expertise within the district
+      - Align with broader district strategic goals
+      
+      Format as JSON:
+      {
+        "system_initiatives": [
+          {
+            "initiative_name": "Initiative title",
+            "focus_area": "Primary domain or skill area",
+            "target_audience": "Who will participate",
+            "rationale": "Why this is a priority",
+            "schools_served": ["school1", "school2"],
+            "timeline": "Implementation schedule"
+          }
+        ],
+        "cross_school_cohorts": [
+          {
+            "cohort_name": "Cohort title", 
+            "participating_schools": ["school1", "school2"],
+            "focus_domain": "Danielson domain or skill area",
+            "collaboration_model": "How schools will work together"
+          }
+        ],
+        "implementation_timeline": {
+          "immediate": ["action 1", "action 2"],
+          "quarter_1": ["action 1", "action 2"],
+          "quarter_2": ["action 1", "action 2"],
+          "year_2": ["action 1", "action 2"]
+        },
+        "resource_requirements": {
+          "staffing": ["Staff need 1", "Staff need 2"],
+          "budget": ["Budget item 1", "Budget item 2"], 
+          "infrastructure": ["Infrastructure need 1"]
+        },
+        "success_metrics": ["metric 1", "metric 2", "metric 3"],
+        "sustainability_plan": ["strategy 1", "strategy 2", "strategy 3"]
+      }
+    
+    variables:
+      - name: pd_needs_analysis
+        description: "Aggregated professional development needs across all schools"
+        required: true
+        variable_type: str
+        
+      - name: cross_school_opportunities
+        description: "Identified opportunities for schools to collaborate and share expertise"
+        required: true
+        variable_type: str
+        
+      - name: resource_constraints
+        description: "Budget, staffing, and infrastructure constraints"
+        required: false
+        default_value: "Standard district professional development resources"
+        variable_type: str
+        
+      - name: existing_infrastructure
+        description: "Current PD systems, staff, and resources available"
+        required: false
+        default_value: "Standard district professional development infrastructure"
+        variable_type: str
+        
+      - name: strategic_goals
+        description: "District strategic goals and priorities"
+        required: true
+        variable_type: str

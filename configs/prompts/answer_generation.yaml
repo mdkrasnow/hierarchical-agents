@@ -1,0 +1,333 @@
+name: answer_generation_prompts
+description: Prompt templates for generating candidate answers to evaluation questions
+version: "1.0"
+tags: ["answer-generation", "evaluation", "meta-evaluation"]
+
+templates:
+  - name: answer_generation_direct
+    description: "Direct answer generation without explicit reasoning steps"
+    template: |
+      You are an expert assistant providing thoughtful, comprehensive answers to evaluation questions.
+      
+      Instructions:
+      - Provide a clear, well-structured answer to the question
+      - Focus on being helpful, accurate, and thorough
+      - Use specific examples and evidence when relevant
+      - Maintain a professional but accessible tone
+      {% if custom_instructions %}
+      - Additional guidance: {{ custom_instructions }}
+      {% endif %}
+      {% if target_length %}
+      - Target length: approximately {{ target_length }} words
+      {% endif %}
+      
+      {% if context %}
+      Context Information:
+      {% for key, value in context.items() %}
+      - {{ key }}: {{ value }}
+      {% endfor %}
+      {% endif %}
+      
+      Question: {{ question }}
+      
+      Please provide a comprehensive answer:
+    
+    variables:
+      - name: question
+        description: "The question or prompt to answer"
+        required: true
+        variable_type: str
+      
+      - name: custom_instructions
+        description: "Additional specific instructions for answer generation"
+        required: false
+        variable_type: str
+        
+      - name: target_length
+        description: "Target answer length in words"
+        required: false
+        variable_type: int
+        
+      - name: context
+        description: "Additional context information as key-value pairs"
+        required: false
+        variable_type: dict
+
+  - name: answer_generation_cot
+    description: "Chain-of-thought answer generation with explicit reasoning"
+    template: |
+      You are an expert assistant providing thoughtful, well-reasoned answers to evaluation questions.
+      
+      Instructions:
+      - Think through the question step by step before providing your answer
+      - Show your reasoning process clearly
+      - Provide a comprehensive final answer based on your analysis
+      - Use specific examples and evidence when relevant
+      - Maintain a professional but accessible tone
+      {% if custom_instructions %}
+      - Additional guidance: {{ custom_instructions }}
+      {% endif %}
+      {% if target_length %}
+      - Target final answer length: approximately {{ target_length }} words
+      {% endif %}
+      
+      {% if context %}
+      Context Information:
+      {% for key, value in context.items() %}
+      - {{ key }}: {{ value }}
+      {% endfor %}
+      {% endif %}
+      
+      Question: {{ question }}
+      
+      Please think through this step by step:
+      
+      Reasoning:
+      1. [First, analyze what the question is asking]
+      2. [Consider relevant factors and perspectives]  
+      3. [Identify key points to address]
+      4. [Consider evidence and examples]
+      5. [Synthesize into a coherent response]
+      
+      Final Answer:
+      [Provide your complete, well-structured answer here]
+    
+    variables:
+      - name: question
+        description: "The question or prompt to answer"
+        required: true
+        variable_type: str
+      
+      - name: custom_instructions
+        description: "Additional specific instructions for answer generation"
+        required: false
+        variable_type: str
+        
+      - name: target_length
+        description: "Target final answer length in words"
+        required: false
+        variable_type: int
+        
+      - name: context
+        description: "Additional context information as key-value pairs"
+        required: false
+        variable_type: dict
+
+  - name: answer_generation_educational
+    description: "Specialized template for educational evaluation questions"
+    template: |
+      You are an expert in educational evaluation and assessment, providing thorough analysis of teaching and learning questions.
+      
+      Instructions:
+      - Draw upon best practices in education and evaluation
+      - Consider multiple stakeholder perspectives (teachers, students, administrators)
+      - Ground your response in educational research when relevant
+      - Provide actionable insights and recommendations
+      - Use clear, professional language appropriate for educational contexts
+      {% if custom_instructions %}
+      - Additional guidance: {{ custom_instructions }}
+      {% endif %}
+      {% if target_length %}
+      - Target length: approximately {{ target_length }} words
+      {% endif %}
+      
+      {% if context %}
+      Educational Context:
+      {% for key, value in context.items() %}
+      - {{ key }}: {{ value }}
+      {% endfor %}
+      {% endif %}
+      
+      Question: {{ question }}
+      
+      Educational Analysis and Response:
+    
+    variables:
+      - name: question
+        description: "The educational evaluation question to answer"
+        required: true
+        variable_type: str
+      
+      - name: custom_instructions
+        description: "Additional specific instructions for answer generation"
+        required: false
+        variable_type: str
+        
+      - name: target_length
+        description: "Target answer length in words"
+        required: false
+        variable_type: int
+        
+      - name: context
+        description: "Educational context information"
+        required: false
+        variable_type: dict
+
+  - name: answer_generation_danielson
+    description: "Specialized template for Danielson Framework evaluation questions"
+    template: |
+      You are an expert in the Danielson Framework for Teaching, providing detailed analysis of teacher evaluation questions.
+      
+      Framework Context:
+      The Danielson Framework evaluates teaching across four domains:
+      - Domain I: Planning and Preparation
+      - Domain II: Classroom Environment  
+      - Domain III: Instruction
+      - Domain IV: Professional Responsibilities
+      
+      Instructions:
+      - Reference relevant Danielson domains and components when applicable
+      - Consider the four performance levels: Ineffective (1), Developing (2), Proficient (3), Distinguished (4)
+      - Provide evidence-based analysis and recommendations
+      - Address both strengths and areas for growth
+      - Use professional evaluation language
+      {% if custom_instructions %}
+      - Additional guidance: {{ custom_instructions }}
+      {% endif %}
+      {% if target_length %}
+      - Target length: approximately {{ target_length }} words
+      {% endif %}
+      
+      {% if context %}
+      Evaluation Context:
+      {% for key, value in context.items() %}
+      - {{ key }}: {{ value }}
+      {% endfor %}
+      {% endif %}
+      
+      Question: {{ question }}
+      
+      Danielson Framework Analysis:
+    
+    variables:
+      - name: question
+        description: "The Danielson evaluation question to answer"
+        required: true
+        variable_type: str
+      
+      - name: custom_instructions
+        description: "Additional specific instructions for answer generation"
+        required: false
+        variable_type: str
+        
+      - name: target_length
+        description: "Target answer length in words"
+        required: false
+        variable_type: int
+        
+      - name: context
+        description: "Evaluation context including teacher, school, domain information"
+        required: false
+        variable_type: dict
+
+  - name: answer_generation_retry
+    description: "Template for retry generation with validation feedback"
+    template: |
+      You are generating an improved answer to an evaluation question based on initial feedback.
+      
+      Previous attempt had the following issues:
+      {% for issue in validation_issues %}
+      - {{ issue }}
+      {% endfor %}
+      
+      {% if quality_recommendations %}
+      Recommendations for improvement:
+      {% for rec in quality_recommendations %}
+      - {{ rec }}
+      {% endfor %}
+      {% endif %}
+      
+      Instructions for this retry:
+      - Address the specific issues identified above
+      - Provide a more comprehensive and better-structured response
+      - Ensure your answer directly addresses all aspects of the question
+      - Use concrete examples and specific details
+      {% if custom_instructions %}
+      - Additional guidance: {{ custom_instructions }}
+      {% endif %}
+      {% if target_length %}
+      - Target length: approximately {{ target_length }} words
+      {% endif %}
+      
+      {% if context %}
+      Context Information:
+      {% for key, value in context.items() %}
+      - {{ key }}: {{ value }}
+      {% endfor %}
+      {% endif %}
+      
+      Question: {{ question }}
+      
+      Improved Answer:
+    
+    variables:
+      - name: question
+        description: "The original question to answer"
+        required: true
+        variable_type: str
+      
+      - name: validation_issues
+        description: "List of issues identified with previous attempt"
+        required: true
+        variable_type: list
+        
+      - name: quality_recommendations
+        description: "List of quality improvement recommendations"
+        required: false
+        variable_type: list
+      
+      - name: custom_instructions
+        description: "Additional specific instructions for answer generation"
+        required: false
+        variable_type: str
+        
+      - name: target_length
+        description: "Target answer length in words"
+        required: false
+        variable_type: int
+        
+      - name: context
+        description: "Additional context information"
+        required: false
+        variable_type: dict
+
+  - name: answer_synthesis
+    description: "Template for synthesizing multiple agent responses"
+    template: |
+      You are synthesizing multiple expert responses into a single, coherent answer.
+      
+      Original Question: {{ question }}
+      
+      Expert Responses to Synthesize:
+      {% for response in expert_responses %}
+      {{ loop.index }}. {{ response }}
+      
+      {% endfor %}
+      
+      Instructions:
+      - Integrate the key insights from each expert response
+      - Eliminate redundancy while preserving unique perspectives
+      - Create a coherent, well-structured final answer
+      - Ensure the synthesis addresses all aspects of the original question
+      - Maintain the professional tone and expertise level of the sources
+      {% if target_length %}
+      - Target length: approximately {{ target_length }} words
+      {% endif %}
+      
+      Synthesized Response:
+    
+    variables:
+      - name: question
+        description: "The original question that was answered"
+        required: true
+        variable_type: str
+        
+      - name: expert_responses
+        description: "List of expert responses to synthesize"
+        required: true
+        variable_type: list
+        
+      - name: target_length
+        description: "Target synthesized answer length in words"
+        required: false
+        variable_type: int

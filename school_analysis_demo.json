@@ -1,0 +1,117 @@
+{
+  "school_id": "964c5028-b3ec-4a04-a46f-0db0a33de060",
+  "school_name": "Lincoln Elementary School",
+  "organization_id": null,
+  "analysis_period_start": "2025-06-11 21:31:02.129673",
+  "analysis_period_end": "2025-12-08 21:31:02.129678",
+  "num_teachers_analyzed": 5,
+  "domain_stats": {
+    "I-A": {
+      "green": 3,
+      "yellow": 1,
+      "red": 1
+    },
+    "II-B": {
+      "green": 2,
+      "yellow": 3,
+      "red": 0
+    },
+    "III-C": {
+      "green": 2,
+      "yellow": 3,
+      "red": 0
+    },
+    "IV-A": {
+      "green": 3,
+      "yellow": 2,
+      "red": 0
+    }
+  },
+  "domain_percentages": {
+    "I-A": {
+      "green": 0.6,
+      "yellow": 0.2,
+      "red": 0.2
+    },
+    "II-B": {
+      "green": 0.4,
+      "yellow": 0.6,
+      "red": 0.0
+    },
+    "III-C": {
+      "green": 0.4,
+      "yellow": 0.6,
+      "red": 0.0
+    },
+    "IV-A": {
+      "green": 0.6,
+      "yellow": 0.4,
+      "red": 0.0
+    }
+  },
+  "PD_cohorts": [
+    {
+      "domain_id": "II-B",
+      "focus_area": "Classroom Management",
+      "teacher_ids": [
+        "88554262-f6ac-4629-a72a-a561a3c99f13",
+        "c32d9e8d-a815-4603-a61b-1de810771eed",
+        "0a34e40b-23f4-4b64-b5dd-13f17bbc869c"
+      ],
+      "teacher_names": [
+        "Marcus Rodriguez",
+        "Jennifer Park",
+        "Lisa Chen"
+      ],
+      "priority_level": "high",
+      "suggested_duration": "2-3 sessions"
+    },
+    {
+      "domain_id": "III-C",
+      "focus_area": "Student Engagement",
+      "teacher_ids": [
+        "88554262-f6ac-4629-a72a-a561a3c99f13",
+        "c32d9e8d-a815-4603-a61b-1de810771eed",
+        "215dfc7a-8e86-436b-9573-c6f9e8bc0cbf"
+      ],
+      "teacher_names": [
+        "Marcus Rodriguez",
+        "Jennifer Park",
+        "David Thompson"
+      ],
+      "priority_level": "high",
+      "suggested_duration": "4-6 sessions"
+    }
+  ],
+  "priority_domains": [
+    "II-B",
+    "III-C",
+    "I-A",
+    "IV-A"
+  ],
+  "school_strengths": [
+    "Consistent strength in I-A, IV-A",
+    "1 exemplar teachers demonstrating best practices"
+  ],
+  "school_needs": [
+    "Professional development focus needed in II-B, III-C",
+    "Targeted support for 1 teachers",
+    "Teacher wellness and retention support strategies"
+  ],
+  "stories_for_principal": [
+    "Leverage Sarah Mitchell as mentor teachers and instructional leaders",
+    "Focus PD resources on II-B to achieve school-wide improvement"
+  ],
+  "stories_for_supervisor_or_board": [
+    "School is requiring focused support and intervention with clear action plan for continued growth"
+  ],
+  "exemplar_teachers": [
+    "Sarah Mitchell"
+  ],
+  "teachers_needing_support": [
+    "Jennifer Park"
+  ],
+  "overall_performance_level": "yellow",
+  "school_risk_level": "high",
+  "improvement_trend": "declining"
+}

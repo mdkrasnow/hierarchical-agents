@@ -15,7 +15,11 @@ from .agent_outputs import (
     DistrictSummary,
     DomainSummary,
     DomainStatus,
-    RiskLevel
+    RiskLevel,
+    TrendDirection,
+    PDCohort,
+    SchoolRanking,
+    BoardStory
 )
 from .permissions import PermissionScope, UserScope
 from . import utils
@@ -35,6 +39,10 @@ __all__ = [
     "DomainSummary",
     "DomainStatus",
     "RiskLevel",
+    "TrendDirection",
+    "PDCohort",
+    "SchoolRanking",
+    "BoardStory",
     
     # Permission models
     "PermissionScope",
