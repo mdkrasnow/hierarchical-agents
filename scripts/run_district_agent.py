@@ -31,107 +31,7 @@ from models import (
     TrendDirection,
     PDCohort
 )
-from utils.llm import LLMClient, LLMProvider, LLMRequest, LLMResponse
-
-
-class MockDistrictLLMProvider(LLMProvider):
-    """Mock LLM provider for district agent demonstrations."""
-    
-    async def call_single(self, request: LLMRequest) -> LLMResponse:
-        """Mock single call with realistic district responses."""
-        if request.response_format:
-            # Handle structured responses
-            if "DistrictNarratives" in str(request.response_format):
-                from agents.district import DistrictNarratives, BoardStory
-                mock_data = DistrictNarratives(
-                    district_strengths=[
-                        "Strong instructional leadership capacity across multiple schools",
-                        "Effective teacher collaboration and professional learning communities",
-                        "Successful integration of data-driven decision making"
-                    ],
-                    district_needs=[
-                        "System-wide focus on student engagement and motivation strategies", 
-                        "Enhanced classroom management support for new teachers",
-                        "Strengthened equity practices across all schools"
-                    ],
-                    executive_summary="The district demonstrates solid foundational strengths in leadership and collaboration, with clear opportunities for strategic improvement in student engagement and equitable teaching practices. Our data shows strong teacher performance in content knowledge while revealing system-wide needs in classroom management and student motivation strategies.",
-                    recommended_pd_strategy=[
-                        "Launch district-wide Student Engagement Initiative with research-based strategies",
-                        "Implement cross-school Classroom Management Mentorship Program",
-                        "Develop Equity and Culturally Responsive Teaching professional learning series",
-                        "Create Teacher Leadership Academy for instructional coaches",
-                        "Establish Data-Driven Instruction workshops for all schools"
-                    ],
-                    board_stories=[
-                        BoardStory(
-                            title="Celebrating Instructional Excellence",
-                            narrative="Multiple schools demonstrate exceptional teacher performance with 60% of teachers showing strong content mastery and effective instructional practices.",
-                            story_type="positive",
-                            supporting_data={"exemplar_teachers": 15, "high_performing_schools": 2},
-                            call_to_action=None
-                        ),
-                        BoardStory(
-                            title="Strategic Professional Development Investment",
-                            narrative="District-wide analysis reveals shared needs in student engagement, creating opportunities for efficient resource allocation and cross-school collaboration.",
-                            story_type="neutral", 
-                            supporting_data={"schools_with_shared_needs": 4, "teachers_to_benefit": 85},
-                            call_to_action="Approve $150K investment in professional development initiatives"
-                        ),
-                        BoardStory(
-                            title="Supporting Schools in Transition",
-                            narrative="Two schools require intensive support in classroom management and teacher retention, representing 35% of our teaching force.",
-                            story_type="concern",
-                            supporting_data={"schools_needing_support": 2, "teachers_at_risk": 30},
-                            call_to_action="Authorize additional coaching and mentorship resources"
-                        )
-                    ],
-                    celebration_opportunities=[
-                        "Recognize exemplary teachers at spring board meeting",
-                        "Highlight successful cross-school collaboration at community forums",
-                        "Feature innovative teaching practices in district newsletter"
-                    ],
-                    resource_priorities=[
-                        "Student engagement professional development funding",
-                        "Additional instructional coaching support for struggling schools", 
-                        "Technology resources for data-driven instruction",
-                        "Teacher wellness and retention program expansion"
-                    ]
-                )
-                
-                return LLMResponse(
-                    content=mock_data.model_dump_json(),
-                    parsed_data=mock_data,
-                    latency_ms=250.0,
-                    token_usage={"input_tokens": 800, "output_tokens": 400}
-                )
-        
-        # Default mock response
-        return LLMResponse(
-            content="Mock LLM response for unstructured request",
-            latency_ms=100.0,
-            token_usage={"input_tokens": 50, "output_tokens": 25}
-        )
-    
-    async def call_batch(self, requests: List[LLMRequest]):
-        """Mock batch call."""
-        import asyncio
-        import time
-        from utils.llm import BatchResult
-        
-        start_time = time.time()
-        
-        tasks = [self.call_single(req) for req in requests]
-        responses = await asyncio.gather(*tasks)
-        
-        total_latency_ms = (time.time() - start_time) * 1000
-        
-        return BatchResult(
-            responses=responses,
-            failed_requests=[],
-            total_latency_ms=total_latency_ms,
-            successful_count=len(responses),
-            failed_count=0
-        )
+from utils.llm import create_llm_client
 
 
 def create_demo_school_summaries() -> List[SchoolSummary]:
@@ -501,9 +401,8 @@ async def run_district_agent(
         logger.info(f"Schools to analyze: {len(school_summaries)}")
         logger.info(f"Total teachers: {sum(s.num_teachers_analyzed for s in school_summaries)}")
         
-        # Initialize agent with mock LLM client
-        mock_provider = MockDistrictLLMProvider()
-        llm_client = LLMClient(provider=mock_provider)
+        # Initialize agent with LLM client
+        llm_client = create_llm_client()
         district_agent = DistrictAgent(llm_client=llm_client)
         
         # Execute district analysis

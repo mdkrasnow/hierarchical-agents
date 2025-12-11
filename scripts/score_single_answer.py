@@ -261,9 +261,9 @@ Examples:
                        help='Evaluation context (default: "General evaluation")')
     
     # General options
-    parser.add_argument('--provider', default='mock', 
-                       choices=['mock', 'claude', 'openai'],
-                       help='LLM provider to use (default: mock)')
+    parser.add_argument('--provider', default=None, 
+                       choices=['gemini', 'claude'],
+                       help='LLM provider to use (auto-selects based on available API keys)')
     parser.add_argument('--detailed', action='store_true',
                        help='Show detailed evaluation reasoning')
     

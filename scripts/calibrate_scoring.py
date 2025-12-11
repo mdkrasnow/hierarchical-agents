@@ -600,9 +600,9 @@ Examples:
     generate_parser.add_argument('--method', default='single_critic',
                                 choices=['single_critic', 'multi_critic'],
                                 help='Automated scoring method')
-    generate_parser.add_argument('--provider', default='mock',
-                                choices=['mock', 'claude', 'openai'],
-                                help='LLM provider for scoring')
+    generate_parser.add_argument('--provider', default=None,
+                                choices=['gemini', 'claude'],
+                                help='LLM provider for scoring (auto-selects based on available API keys)')
     
     # Analyze command
     analyze_parser = subparsers.add_parser('analyze', help='Analyze score alignment')

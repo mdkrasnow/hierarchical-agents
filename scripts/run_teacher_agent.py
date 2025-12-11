@@ -201,8 +201,8 @@ async def main():
     parser.add_argument("--output", help="Output file for teacher summary (default: stdout)")
     
     # Configuration
-    parser.add_argument("--llm-provider", choices=["mock", "claude"], default="mock",
-                       help="LLM provider to use")
+    parser.add_argument("--llm-provider", choices=["gemini", "claude"], default=None,
+                       help="LLM provider to use (auto-selects based on available API keys)")
     parser.add_argument("--api-key", help="API key for LLM provider (if required)")
     parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"])
     parser.add_argument("--pd-focus-limit", type=int, default=3, 

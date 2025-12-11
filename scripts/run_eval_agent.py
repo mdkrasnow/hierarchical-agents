@@ -166,8 +166,8 @@ async def test_basic_evaluation_processing():
     
     logger.info("Testing basic evaluation processing...")
     
-    # Create LLM client (mock for testing)
-    llm_client = create_llm_client("mock", delay_ms=50)
+    # Create LLM client (auto-selects based on available API keys)
+    llm_client = create_llm_client()
     
     # Create agent
     agent = DanielsonEvaluationAgent(llm_client=llm_client)
@@ -226,7 +226,7 @@ async def test_danielson_specific_agent():
     logger.info("Testing Danielson-specific agent...")
     
     # Create LLM client
-    llm_client = create_llm_client("mock", delay_ms=75)
+    llm_client = create_llm_client()
     
     # Create Danielson-specific agent
     agent = DanielsonSpecificAgent(llm_client=llm_client)
@@ -274,7 +274,7 @@ async def test_error_handling():
     
     logger.info("Testing error handling...")
     
-    llm_client = create_llm_client("mock")
+    llm_client = create_llm_client()
     agent = DanielsonEvaluationAgent(llm_client=llm_client)
     
     # Test with minimal/missing data
@@ -314,7 +314,7 @@ async def test_batch_processing():
     
     logger.info("Testing batch processing...")
     
-    llm_client = create_llm_client("mock", delay_ms=30)
+    llm_client = create_llm_client()
     agent = DanielsonEvaluationAgent(llm_client=llm_client)
     
     sample_evaluations = create_sample_evaluation_data()
@@ -349,7 +349,7 @@ async def demonstrate_output_formats():
     
     logger.info("Demonstrating output formats...")
     
-    llm_client = create_llm_client("mock")
+    llm_client = create_llm_client()
     agent = DanielsonEvaluationAgent(llm_client=llm_client)
     
     # Process one evaluation

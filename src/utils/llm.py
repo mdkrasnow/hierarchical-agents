@@ -12,6 +12,13 @@ from contextlib import asynccontextmanager
 import aiohttp
 from pydantic import BaseModel, ValidationError as PydanticValidationError
 
+try:
+    import google.genai as genai
+    from google.genai import types as genai_types
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+
 
 logger = logging.getLogger(__name__)
 
@@ -82,68 +89,6 @@ class LLMProvider(ABC):
         pass
 
 
-class MockLLMProvider(LLMProvider):
-    """Mock LLM provider for testing."""
-    
-    def __init__(self, delay_ms: float = 100, fail_rate: float = 0.0):
-        self.delay_ms = delay_ms
-        self.fail_rate = fail_rate
-        self._call_count = 0
-    
-    async def call_single(self, request: LLMRequest) -> LLMResponse:
-        """Mock implementation that returns structured responses."""
-        self._call_count += 1
-        await asyncio.sleep(self.delay_ms / 1000)
-        
-        if self.fail_rate > 0 and (self._call_count % int(1 / self.fail_rate)) == 0:
-            raise APIError("Mock API error")
-        
-        # Generate mock response based on response format
-        if request.response_format:
-            try:
-                # Create a mock instance with default values
-                mock_data = request.response_format()
-                content = mock_data.model_dump_json()
-                parsed_data = mock_data
-            except Exception:
-                content = '{"mock": "response"}'
-                parsed_data = None
-        else:
-            content = "Mock LLM response"
-            parsed_data = None
-        
-        return LLMResponse(
-            content=content,
-            parsed_data=parsed_data,
-            latency_ms=self.delay_ms,
-            token_usage={"input_tokens": 50, "output_tokens": 25}
-        )
-    
-    async def call_batch(self, requests: List[LLMRequest]) -> BatchResult:
-        """Process requests in parallel with mock provider."""
-        start_time = time.time()
-        
-        tasks = [self.call_single(req) for req in requests]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        
-        responses = []
-        failed_requests = []
-        
-        for i, result in enumerate(results):
-            if isinstance(result, Exception):
-                failed_requests.append((i, result))
-            else:
-                responses.append(result)
-        
-        total_latency_ms = (time.time() - start_time) * 1000
-        
-        return BatchResult(
-            responses=responses,
-            failed_requests=failed_requests,
-            total_latency_ms=total_latency_ms,
-            successful_count=len(responses),
-            failed_count=len(failed_requests)
-        )
 
 
 class ClaudeLLMProvider(LLMProvider):
@@ -286,6 +231,162 @@ class ClaudeLLMProvider(LLMProvider):
         return None
 
 
+class GeminiLLMProvider(LLMProvider):
+    """Google Gemini API provider implementation."""
+    
+    def __init__(
+        self,
+        api_key: str,
+        model: str = "gemini-2.5-flash",
+        max_retries: int = 3,
+        retry_delay: float = 1.0,
+        timeout: float = 60.0
+    ):
+        if not GEMINI_AVAILABLE:
+            raise ImportError("google-genai package not available. Install with: pip install google-genai")
+        
+        self.api_key = api_key
+        self.model = model
+        self.max_retries = max_retries
+        self.retry_delay = retry_delay
+        self.timeout = timeout
+        self.client = genai.Client(api_key=api_key)
+        
+    async def call_single(self, request: LLMRequest) -> LLMResponse:
+        """Make a single Gemini API call with retry logic."""
+        start_time = time.time()
+        
+        # Prepare the generation config
+        generation_config = {
+            "temperature": request.temperature,
+        }
+        if request.max_tokens:
+            generation_config["max_output_tokens"] = request.max_tokens
+        
+        # If structured output is requested, add JSON schema instructions to prompt
+        prompt = request.prompt
+        if request.response_format:
+            schema = request.response_format.model_json_schema()
+            prompt += f"\n\nPlease respond with valid JSON that matches this schema:\n```json\n{json.dumps(schema, indent=2)}\n```"
+        
+        for attempt in range(self.max_retries + 1):
+            try:
+                # Make the API call using the genai client
+                response = await asyncio.to_thread(
+                    self.client.models.generate_content,
+                    model=self.model,
+                    contents=prompt,
+                    config=genai_types.GenerateContentConfig(**generation_config)
+                )
+                
+                # Extract content from response
+                content = response.text if hasattr(response, 'text') else str(response)
+                
+                latency_ms = (time.time() - start_time) * 1000
+                
+                # Parse structured output if format specified
+                parsed_data = None
+                if request.response_format and content:
+                    try:
+                        # Try to parse JSON from content
+                        json_str = self._extract_json(content)
+                        if json_str:
+                            json_data = json.loads(json_str)
+                            parsed_data = request.response_format.model_validate(json_data)
+                    except (json.JSONDecodeError, PydanticValidationError) as e:
+                        raise ValidationError(f"Failed to parse Gemini response: {e}")
+                
+                # Extract token usage if available
+                token_usage = {}
+                if hasattr(response, 'usage_metadata'):
+                    usage = response.usage_metadata
+                    token_usage = {
+                        "input_tokens": getattr(usage, 'prompt_token_count', 0),
+                        "output_tokens": getattr(usage, 'candidates_token_count', 0),
+                        "total_tokens": getattr(usage, 'total_token_count', 0)
+                    }
+                
+                return LLMResponse(
+                    content=content,
+                    parsed_data=parsed_data,
+                    latency_ms=latency_ms,
+                    token_usage=token_usage
+                )
+                
+            except Exception as e:
+                error_str = str(e).lower()
+                
+                # Check for rate limiting
+                if "rate limit" in error_str or "quota" in error_str:
+                    if attempt < self.max_retries:
+                        wait_time = self.retry_delay * (2 ** attempt)
+                        logger.warning(f"Gemini rate limit hit, waiting {wait_time}s before retry")
+                        await asyncio.sleep(wait_time)
+                        continue
+                    else:
+                        raise RateLimitError("Gemini rate limit exceeded")
+                
+                # Check for API errors
+                if "api" in error_str or "invalid" in error_str:
+                    raise APIError(f"Gemini API error: {e}")
+                
+                # For other errors, retry with exponential backoff
+                if attempt == self.max_retries:
+                    raise APIError(f"Gemini API call failed after {self.max_retries} retries: {e}")
+                
+                await asyncio.sleep(self.retry_delay * (2 ** attempt))
+    
+    async def call_batch(self, requests: List[LLMRequest]) -> BatchResult:
+        """Process multiple requests with concurrency control."""
+        # Use semaphore to control concurrency and respect rate limits
+        semaphore = asyncio.Semaphore(3)  # Lower concurrency for Gemini
+        
+        async def bounded_call(req: LLMRequest) -> LLMResponse:
+            async with semaphore:
+                return await self.call_single(req)
+        
+        start_time = time.time()
+        
+        tasks = [bounded_call(req) for req in requests]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        responses = []
+        failed_requests = []
+        
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                failed_requests.append((i, result))
+            else:
+                responses.append(result)
+        
+        total_latency_ms = (time.time() - start_time) * 1000
+        
+        return BatchResult(
+            responses=responses,
+            failed_requests=failed_requests,
+            total_latency_ms=total_latency_ms,
+            successful_count=len(responses),
+            failed_count=len(failed_requests)
+        )
+    
+    def _extract_json(self, content: str) -> Optional[str]:
+        """Extract JSON from Gemini response content."""
+        # Try to find JSON in code blocks first
+        import re
+        json_pattern = r'```(?:json)?\s*(\{.*?\})\s*```'
+        match = re.search(json_pattern, content, re.DOTALL)
+        if match:
+            return match.group(1)
+        
+        # Try to find JSON object directly
+        json_pattern = r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}'
+        match = re.search(json_pattern, content, re.DOTALL)
+        if match:
+            return match.group(0)
+        
+        return None
+
+
 class LLMClient:
     """High-level client for LLM operations with built-in retry and error handling."""
     
@@ -402,18 +503,63 @@ class LLMClient:
 
 # Convenience function for creating LLM clients
 def create_llm_client(
-    provider_type: str = "mock",
+    provider_type: Optional[str] = None,
     api_key: Optional[str] = None,
     **kwargs
 ) -> LLMClient:
-    """Create an LLM client with the specified provider."""
-    if provider_type == "mock":
-        provider = MockLLMProvider(**kwargs)
-    elif provider_type == "claude":
+    """Create an LLM client with the specified provider.
+    
+    If provider_type is None, will auto-select based on available environment variables:
+    1. Gemini if GEMINI_API_KEY is set
+    2. Claude if ANTHROPIC_API_KEY is set  
+    3. OpenAI if OPENAI_API_KEY is set (when implemented)
+    
+    Requires a valid API key - no mock fallback.
+    """
+    import os
+    
+    # Auto-select provider based on environment if not specified
+    if provider_type is None:
+        if os.getenv("GEMINI_API_KEY"):
+            provider_type = "gemini"
+            api_key = api_key or os.getenv("GEMINI_API_KEY")
+        elif os.getenv("ANTHROPIC_API_KEY"):
+            provider_type = "claude"
+            api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+        elif os.getenv("OPENAI_API_KEY"):
+            provider_type = "openai"
+            api_key = api_key or os.getenv("OPENAI_API_KEY")
+        else:
+            raise ValueError(
+                "No LLM API key found in environment. Please set one of:\n"
+                "- GEMINI_API_KEY (recommended)\n"
+                "- ANTHROPIC_API_KEY\n"
+                "- OPENAI_API_KEY (when implemented)\n"
+                "\nGet a Gemini API key at: https://aistudio.google.com/apikey"
+            )
+    
+    # Use provided or environment API key if not specified
+    if api_key is None:
+        if provider_type == "gemini":
+            api_key = os.getenv("GEMINI_API_KEY")
+        elif provider_type == "claude":
+            api_key = os.getenv("ANTHROPIC_API_KEY")
+        elif provider_type == "openai":
+            api_key = os.getenv("OPENAI_API_KEY")
+    
+    # Create the appropriate provider
+    if provider_type == "claude":
         if not api_key:
             raise ValueError("API key required for Claude provider")
         provider = ClaudeLLMProvider(api_key=api_key, **kwargs)
+    elif provider_type == "gemini":
+        if not api_key:
+            raise ValueError("API key required for Gemini provider")
+        provider = GeminiLLMProvider(api_key=api_key, **kwargs)
+    elif provider_type == "openai":
+        # Note: OpenAI provider not yet implemented
+        raise ValueError("OpenAI provider not yet implemented")
     else:
-        raise ValueError(f"Unknown provider type: {provider_type}")
+        raise ValueError(f"Unknown provider type: {provider_type}. Supported: gemini, claude")
     
     return LLMClient(provider=provider)

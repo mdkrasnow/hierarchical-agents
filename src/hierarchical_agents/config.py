@@ -29,6 +29,7 @@ class LLMConfig(BaseSettings):
     
     openai_api_key: Optional[str] = Field(None, env="OPENAI_API_KEY")
     anthropic_api_key: Optional[str] = Field(None, env="ANTHROPIC_API_KEY")
+    gemini_api_key: Optional[str] = Field(None, env="GEMINI_API_KEY")
     max_concurrent_requests: int = Field(10, env="MAX_CONCURRENT_REQUESTS")
     request_timeout: float = Field(30.0, env="REQUEST_TIMEOUT")
     max_retries: int = Field(3, env="MAX_RETRIES")

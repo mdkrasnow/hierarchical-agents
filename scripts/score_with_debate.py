@@ -393,9 +393,9 @@ Examples:
                        help='Show detailed individual critic results')
     
     # General options
-    parser.add_argument('--provider', default='mock', 
-                       choices=['mock', 'claude', 'openai'],
-                       help='LLM provider to use (default: mock)')
+    parser.add_argument('--provider', default=None, 
+                       choices=['gemini', 'claude'],
+                       help='LLM provider to use (auto-selects based on available API keys)')
     
     args = parser.parse_args()
     

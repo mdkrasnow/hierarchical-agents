@@ -6,166 +6,357 @@
     "selection_strategy": "balanced_sampling",
     "purpose": "human_evaluation_calibration",
     "rubric_version": "1.0",
-    "evaluators_target": ["expert_1", "expert_2", "expert_3"],
+    "evaluators_target": [
+      "expert_1",
+      "expert_2",
+      "expert_3"
+    ],
     "completion_deadline": "2024-12-15",
     "notes": "Representative subset covering all categories and difficulty levels for scoring system calibration"
   },
   "questions": [
     {
-      "id": "hma-001",
-      "prompt": "Explain how to design a hierarchical multi-agent system for complex problem-solving. Include the key architectural components, communication patterns, and coordination mechanisms.",
-      "category": "hierarchical-agents",
-      "tags": ["architecture", "design-patterns", "coordination", "multi-agent-systems"],
-      "expected_key_points": ["hierarchical structure definition", "agent roles and responsibilities", "communication protocols", "task decomposition strategies", "coordination mechanisms", "failure handling", "performance considerations"],
-      "style_requirements": {"format": "structured_guide", "tone": "technical_professional", "length": "detailed", "include_examples": true},
-      "difficulty": "advanced",
-      "rubric_focus": ["coverage", "detail_specificity"],
-      "created_date": "2024-12-08",
-      "calibration_priority": "high",
-      "rationale": "Core architecture question that tests comprehensive coverage and technical depth"
-    },
-    {
-      "id": "hma-002", 
-      "prompt": "You are building a system where multiple AI agents work together to analyze large datasets. Design the communication protocol between agents, including message formats, routing strategies, and error handling mechanisms.",
-      "category": "hierarchical-agents",
-      "tags": ["communication", "protocols", "error-handling", "distributed-systems"],
-      "expected_key_points": ["message format specification", "routing algorithms", "error detection and recovery", "performance optimization", "security considerations", "scalability patterns"],
-      "style_requirements": {"format": "technical_specification", "tone": "precise", "length": "comprehensive", "include_code_examples": true},
-      "difficulty": "expert",
-      "rubric_focus": ["coverage", "detail_specificity", "structure_coherence"],
-      "created_date": "2024-12-08",
-      "calibration_priority": "high",
-      "rationale": "Tests technical specification writing and detailed implementation coverage"
-    },
-    {
-      "id": "hma-003",
-      "prompt": "Compare different coordination strategies for hierarchical agents: centralized vs decentralized vs hybrid approaches. When would you use each one?",
-      "category": "hierarchical-agents", 
-      "tags": ["coordination", "comparison", "architecture-decisions", "trade-offs"],
-      "expected_key_points": ["centralized coordination pros/cons", "decentralized coordination pros/cons", "hybrid approach benefits", "use case scenarios", "performance implications", "scalability considerations", "implementation complexity"],
-      "style_requirements": {"format": "comparison_analysis", "tone": "analytical", "length": "medium", "include_examples": true},
+      "id": "pd-001",
+      "prompt": "How are my teachers performing overall based on recent evaluations?",
+      "category": "overall-performance",
+      "tags": [
+        "teacher-effectiveness",
+        "evaluation-trends",
+        "instructional-quality"
+      ],
+      "expected_key_points": [
+        "overall performance summary",
+        "strength patterns",
+        "areas for improvement",
+        "distribution of ratings"
+      ],
+      "style_requirements": {
+        "format": "summary",
+        "tone": "professional",
+        "length": "medium"
+      },
       "difficulty": "intermediate",
-      "rubric_focus": ["coverage", "structure_coherence"],
+      "rubric_focus": [
+        "coverage",
+        "detail_specificity"
+      ],
+      "created_date": "2024-12-08",
+      "calibration_priority": "high",
+      "rationale": "Core superintendent-level question about general teacher performance"
+    },
+    {
+      "id": "pd-002",
+      "prompt": "How effectively are teachers planning their lessons?",
+      "category": "lesson-planning",
+      "tags": [
+        "planning-quality",
+        "alignment",
+        "preparation"
+      ],
+      "expected_key_points": [
+        "clarity of objectives",
+        "standards alignment",
+        "use of assessments",
+        "consistency across teachers"
+      ],
+      "style_requirements": {
+        "format": "analytic_summary",
+        "tone": "neutral",
+        "length": "medium"
+      },
+      "difficulty": "beginner",
+      "rubric_focus": [
+        "coverage",
+        "structure_coherence"
+      ],
       "created_date": "2024-12-08",
       "calibration_priority": "medium",
-      "rationale": "Tests analytical comparison and structured reasoning abilities"
+      "rationale": "Principal-level planning question that informs PD needs"
     },
     {
-      "id": "sql-001",
-      "prompt": "Design a Supabase schema for a multi-tenant SaaS application with user authentication, organization management, and role-based permissions. Include RLS policies.",
-      "category": "supabase-sql",
-      "tags": ["schema-design", "RLS", "multi-tenant", "permissions", "authentication"],
-      "expected_key_points": ["table structure for multi-tenancy", "user and organization relationships", "role-based access control", "RLS policy implementation", "security considerations", "performance optimization", "data isolation"],
-      "style_requirements": {"format": "technical_guide", "tone": "instructional", "length": "comprehensive", "include_sql_code": true},
-      "difficulty": "advanced", 
-      "rubric_focus": ["detail_specificity", "structure_coherence"],
+      "id": "pd-003",
+      "prompt": "Which teachers show the strongest classroom management skills, and who may need additional support?",
+      "category": "classroom-management",
+      "tags": [
+        "behavior-management",
+        "learning-environment",
+        "support-needs"
+      ],
+      "expected_key_points": [
+        "strong performers",
+        "teachers needing support",
+        "common patterns",
+        "possible PD alignments"
+      ],
+      "style_requirements": {
+        "format": "comparison",
+        "tone": "analytical",
+        "length": "medium"
+      },
+      "difficulty": "intermediate",
+      "rubric_focus": [
+        "coverage",
+        "detail_specificity"
+      ],
+      "created_date": "2024-12-08",
+      "calibration_priority": "medium",
+      "rationale": "Supports school leaders in targeting PD coaching"
+    },
+    {
+      "id": "pd-004",
+      "prompt": "Are teachers differentiating instruction effectively for diverse learners?",
+      "category": "instruction",
+      "tags": [
+        "differentiation",
+        "inclusive-practices",
+        "student-needs"
+      ],
+      "expected_key_points": [
+        "evidence of differentiation",
+        "patterns across grades",
+        "strength areas",
+        "gaps needing PD support"
+      ],
+      "style_requirements": {
+        "format": "analysis",
+        "tone": "professional",
+        "length": "medium"
+      },
+      "difficulty": "intermediate",
+      "rubric_focus": [
+        "coverage",
+        "structure_coherence"
+      ],
       "created_date": "2024-12-08",
       "calibration_priority": "high",
-      "rationale": "Tests technical implementation detail and code quality in different domain"
+      "rationale": "Key superintendent priority tied to equity and instructional quality"
     },
     {
-      "id": "sql-002",
-      "prompt": "Explain how to implement real-time subscriptions in Supabase with PostgreSQL triggers and functions. Include performance considerations and best practices.",
-      "category": "supabase-sql",
-      "tags": ["real-time", "triggers", "functions", "performance", "postgresql"],
-      "expected_key_points": ["trigger creation and management", "function implementation", "subscription patterns", "performance optimization", "error handling", "security considerations", "scaling strategies"],
-      "style_requirements": {"format": "tutorial", "tone": "educational", "length": "detailed", "include_code_examples": true},
-      "difficulty": "intermediate",
-      "rubric_focus": ["coverage", "detail_specificity"],
+      "id": "pd-005",
+      "prompt": "What are the most common strengths across teachers in my district?",
+      "category": "strength-analysis",
+      "tags": [
+        "positive-trends",
+        "teacher-growth",
+        "district-strengths"
+      ],
+      "expected_key_points": [
+        "recurrent strengths",
+        "subject or grade-level patterns",
+        "instructional impact"
+      ],
+      "style_requirements": {
+        "format": "strengths_report",
+        "tone": "encouraging_professional",
+        "length": "medium"
+      },
+      "difficulty": "beginner",
+      "rubric_focus": [
+        "coverage"
+      ],
       "created_date": "2024-12-08",
-      "calibration_priority": "medium", 
-      "rationale": "Tests educational writing style and technical implementation coverage"
+      "calibration_priority": "medium",
+      "rationale": "Promotes recognition and strategic replication of strong practices"
     },
     {
-      "id": "writing-001",
-      "prompt": "Write a comprehensive guide on effective technical writing for software documentation. Cover structure, clarity, audience considerations, and maintenance practices.",
-      "category": "general-writing",
-      "tags": ["technical-writing", "documentation", "communication", "best-practices"],
-      "expected_key_points": ["audience analysis", "content structure", "writing clarity", "technical accuracy", "maintenance strategies", "version control", "collaboration practices"],
-      "style_requirements": {"format": "comprehensive_guide", "tone": "instructional", "length": "detailed", "include_examples": true},
-      "difficulty": "intermediate",
-      "rubric_focus": ["coverage", "style_tone", "structure_coherence"],
+      "id": "pd-006",
+      "prompt": "Which areas of practice appear to need the most professional development support across the district?",
+      "category": "pd-needs",
+      "tags": [
+        "professional-development",
+        "skill-gaps",
+        "district-analysis"
+      ],
+      "expected_key_points": [
+        "frequent weaknesses",
+        "district-wide trends",
+        "priority PD areas",
+        "grade or subject breakdowns"
+      ],
+      "style_requirements": {
+        "format": "needs_assessment",
+        "tone": "analytical",
+        "length": "detailed"
+      },
+      "difficulty": "advanced",
+      "rubric_focus": [
+        "coverage",
+        "detail_specificity"
+      ],
       "created_date": "2024-12-08",
       "calibration_priority": "high",
-      "rationale": "Tests writing quality, style, and tone in meta-domain about writing itself"
+      "rationale": "Directly informs PD strategy for district leaders"
     },
     {
-      "id": "writing-002",
-      "prompt": "Explain how to write clear and actionable bug reports that help developers quickly understand and fix issues. Include examples of good and bad reports.",
-      "category": "general-writing",
-      "tags": ["bug-reports", "communication", "clarity", "actionable-writing"],
-      "expected_key_points": ["essential information elements", "reproduction steps", "environment details", "impact assessment", "priority guidelines", "common mistakes to avoid"],
-      "style_requirements": {"format": "instructional_guide", "tone": "practical", "length": "medium", "include_examples": true},
-      "difficulty": "beginner", 
-      "rubric_focus": ["structure_coherence", "style_tone"],
+      "id": "pd-007",
+      "prompt": "How consistently are teachers using formative assessment during instruction?",
+      "category": "assessment-practice",
+      "tags": [
+        "formative-assessment",
+        "student-feedback",
+        "instructional-adjustment"
+      ],
+      "expected_key_points": [
+        "use frequency",
+        "quality of evidence",
+        "patterns by grade or subject",
+        "impact on instruction"
+      ],
+      "style_requirements": {
+        "format": "analysis",
+        "tone": "neutral",
+        "length": "medium"
+      },
+      "difficulty": "intermediate",
+      "rubric_focus": [
+        "coverage",
+        "detail_specificity"
+      ],
+      "created_date": "2024-12-08",
+      "calibration_priority": "medium",
+      "rationale": "Supports instructional coaching and curriculum alignment"
+    },
+    {
+      "id": "pd-008",
+      "prompt": "How well are teachers fostering positive and productive learning environments?",
+      "category": "learning-environment",
+      "tags": [
+        "environment",
+        "culture",
+        "relationships"
+      ],
+      "expected_key_points": [
+        "student interactions",
+        "classroom tone",
+        "respect and rapport",
+        "emotional safety"
+      ],
+      "style_requirements": {
+        "format": "evaluation_summary",
+        "tone": "professional",
+        "length": "medium"
+      },
+      "difficulty": "beginner",
+      "rubric_focus": [
+        "coverage"
+      ],
       "created_date": "2024-12-08",
       "calibration_priority": "low",
-      "rationale": "Tests basic writing clarity and practical communication skills"
+      "rationale": "Key component of many teacher evaluation frameworks"
     },
     {
-      "id": "hma-004",
-      "prompt": "Design a fault-tolerant hierarchical agent system that can handle individual agent failures without compromising the overall system performance. Include recovery mechanisms and load redistribution strategies.",
-      "category": "hierarchical-agents",
-      "tags": ["fault-tolerance", "reliability", "recovery", "load-balancing"],
-      "expected_key_points": ["failure detection mechanisms", "graceful degradation", "backup agent strategies", "load redistribution", "state recovery", "system health monitoring", "performance impact analysis"],
-      "style_requirements": {"format": "system_design", "tone": "technical", "length": "comprehensive", "include_diagrams": false},
-      "difficulty": "expert",
-      "rubric_focus": ["coverage", "detail_specificity"],
-      "created_date": "2024-12-08",
-      "calibration_priority": "medium",
-      "rationale": "Advanced system design testing comprehensive technical coverage"
-    },
-    {
-      "id": "sql-003",
-      "prompt": "Write SQL queries to analyze user engagement patterns in a Supabase application. Include weekly active users, retention rates, and feature usage analytics.",
-      "category": "supabase-sql",
-      "tags": ["analytics", "user-engagement", "queries", "metrics"],
-      "expected_key_points": ["WAU calculation methods", "retention rate formulas", "feature usage tracking", "time-series analysis", "performance optimization", "data aggregation techniques"],
-      "style_requirements": {"format": "query_collection", "tone": "technical", "length": "medium", "include_sql_queries": true},
+      "id": "pd-009",
+      "prompt": "Which teachers are showing notable growth over time?",
+      "category": "growth-analysis",
+      "tags": [
+        "growth",
+        "longitudinal",
+        "progress"
+      ],
+      "expected_key_points": [
+        "growth patterns",
+        "high-improvement teachers",
+        "areas of improvement",
+        "possible contributing factors"
+      ],
+      "style_requirements": {
+        "format": "trend_analysis",
+        "tone": "analytical",
+        "length": "medium"
+      },
       "difficulty": "intermediate",
-      "rubric_focus": ["detail_specificity", "instruction_following"],
+      "rubric_focus": [
+        "structure_coherence"
+      ],
       "created_date": "2024-12-08",
       "calibration_priority": "low",
-      "rationale": "Tests specific SQL implementation and instruction following"
+      "rationale": "Supports recognizing improvement and effect of PD/coaching"
     },
     {
-      "id": "writing-003",
-      "prompt": "Create a style guide for writing API documentation that is both comprehensive and beginner-friendly. Address endpoint descriptions, parameter documentation, and example usage.",
-      "category": "general-writing",
-      "tags": ["API-documentation", "style-guide", "technical-writing", "user-experience"],
-      "expected_key_points": ["endpoint documentation standards", "parameter specification", "example formats", "error documentation", "authentication guides", "versioning practices", "usability principles"],
-      "style_requirements": {"format": "style_guide", "tone": "authoritative", "length": "comprehensive", "include_templates": true},
+      "id": "pd-010",
+      "prompt": "How aligned is instruction to state standards across classrooms?",
+      "category": "instructional-alignment",
+      "tags": [
+        "standards",
+        "alignment",
+        "instructional-quality"
+      ],
+      "expected_key_points": [
+        "evidence of alignment",
+        "variation across teachers",
+        "subject trends",
+        "alignment challenges"
+      ],
+      "style_requirements": {
+        "format": "analysis",
+        "tone": "technical_professional",
+        "length": "detailed"
+      },
       "difficulty": "advanced",
-      "rubric_focus": ["coverage", "detail_specificity", "structure_coherence"],
+      "rubric_focus": [
+        "detail_specificity",
+        "coverage"
+      ],
+      "created_date": "2024-12-08",
+      "calibration_priority": "medium",
+      "rationale": "Helps leaders ensure instruction meets expectations"
+    },
+    {
+      "id": "pd-011",
+      "prompt": "What evidence is there that teachers are engaging students in higher-order thinking?",
+      "category": "cognitive-engagement",
+      "tags": [
+        "critical-thinking",
+        "rigor",
+        "student-engagement"
+      ],
+      "expected_key_points": [
+        "questioning techniques",
+        "rigor level",
+        "student discourse evidence",
+        "patterns by grade"
+      ],
+      "style_requirements": {
+        "format": "evaluation_report",
+        "tone": "professional",
+        "length": "medium"
+      },
+      "difficulty": "intermediate",
+      "rubric_focus": [
+        "coverage",
+        "detail_specificity"
+      ],
+      "created_date": "2024-12-08",
+      "calibration_priority": "medium",
+      "rationale": "Supports rigor and curriculum quality insights"
+    },
+    {
+      "id": "pd-012",
+      "prompt": "Where do we see the biggest differences in teacher performance between schools in the district?",
+      "category": "inter-school-analysis",
+      "tags": [
+        "school-comparison",
+        "variation",
+        "equity"
+      ],
+      "expected_key_points": [
+        "school-level differences",
+        "patterns by teacher group",
+        "equity implications"
+      ],
+      "style_requirements": {
+        "format": "comparison",
+        "tone": "analytical",
+        "length": "detailed"
+      },
+      "difficulty": "advanced",
+      "rubric_focus": [
+        "coverage",
+        "structure_coherence"
+      ],
       "created_date": "2024-12-08",
       "calibration_priority": "high",
-      "rationale": "Tests comprehensive documentation writing and authoritative style"
-    },
-    {
-      "id": "hma-005",
-      "prompt": "How would you implement task prioritization and resource allocation in a hierarchical multi-agent system with limited computational resources?",
-      "category": "hierarchical-agents",
-      "tags": ["resource-management", "prioritization", "optimization", "scheduling"],
-      "expected_key_points": ["priority algorithms", "resource allocation strategies", "dynamic scheduling", "conflict resolution", "performance metrics", "adaptation mechanisms"],
-      "style_requirements": {"format": "algorithm_description", "tone": "analytical", "length": "detailed", "include_pseudocode": true},
-      "difficulty": "advanced",
-      "rubric_focus": ["detail_specificity", "structure_coherence"],
-      "created_date": "2024-12-08",
-      "calibration_priority": "medium",
-      "rationale": "Tests algorithmic thinking and technical detail specification"
-    },
-    {
-      "id": "sql-004",
-      "prompt": "Optimize a slow-performing Supabase query that joins multiple large tables. Provide indexing strategies, query restructuring options, and performance monitoring techniques.",
-      "category": "supabase-sql",
-      "tags": ["performance", "optimization", "indexing", "query-tuning"],
-      "expected_key_points": ["index design principles", "query execution analysis", "join optimization", "monitoring tools", "caching strategies", "table partitioning", "query rewriting techniques"],
-      "style_requirements": {"format": "optimization_guide", "tone": "technical", "length": "detailed", "include_sql_examples": true},
-      "difficulty": "advanced",
-      "rubric_focus": ["detail_specificity", "coverage"],
-      "created_date": "2024-12-08",
-      "calibration_priority": "medium",
-      "rationale": "Tests advanced technical problem-solving and optimization knowledge"
+      "rationale": "Superintendent-level systems question for resource allocation"
     }
   ],
   "evaluation_instructions": {
@@ -174,7 +365,7 @@
       "Information Coverage (30%)",
       "Detail & Specificity (25%)",
       "Structure & Coherence (20%)",
-      "Style & Tone (15%)", 
+      "Style & Tone (15%)",
       "Instruction Following (10%)"
     ],
     "focus_areas": [
@@ -187,9 +378,9 @@
     ],
     "special_considerations": [
       "Different question categories may emphasize different dimensions",
-      "Advanced questions expect higher technical depth",
-      "Writing questions should be evaluated for communication effectiveness",
-      "SQL questions should include assessment of code quality and practicality"
+      "Advanced questions expect higher depth of analysis",
+      "Writing quality matters across all PD categories",
+      "Responses should be evaluated for clarity and actionable insights"
     ]
   }
 }

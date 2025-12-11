@@ -270,7 +270,7 @@ async def score_answer(question: str, answer: str, context: str = None,
     from utils.llm import create_llm_client, LLMClient
     
     if llm_client is None:
-        llm_client = create_llm_client("mock")  # Use mock by default
+        llm_client = create_llm_client()  # Auto-select provider
     
     agent = SingleCriticAgent(llm_client=llm_client)
     
@@ -313,7 +313,7 @@ async def score_answers_batch(questions: list[str], answers: list[str],
     contexts = contexts or [None] * len(questions)
     
     if llm_client is None:
-        llm_client = create_llm_client("mock")  # Use mock by default
+        llm_client = create_llm_client()  # Auto-select provider
     
     agent = SingleCriticAgent(llm_client=llm_client)
     

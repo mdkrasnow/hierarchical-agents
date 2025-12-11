@@ -523,7 +523,7 @@ class EvaluationQueries:
         org_query = """
         SELECT name 
         FROM public.organizations 
-        WHERE id = $1 AND deleted_at IS NULL
+        WHERE id = $1
         """
         
         pool = await get_database_pool()
